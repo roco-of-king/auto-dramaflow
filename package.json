@@ -1,0 +1,102 @@
+{
+  "name": "toonflow",
+  "version": "1.1.7",
+  "description": "Toonflow 是一款 AI 短剧漫剧工具，能够利用 AI 技术将小说自动转化为剧本，并结合 AI 生成的图片和视频，实现高效的短剧创作。",
+  "author": "HBAI-Ltd <ltlctools@outlook.com>",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/HBAI-Ltd/Toonflow-app#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HBAI-Ltd/Toonflow-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HBAI-Ltd/Toonflow-app/issues",
+    "email": "ltlctools@outlook.com"
+  },
+  "main": "build/main.js",
+  "packageManager": "yarn@1.0.0",
+  "engines": {
+    "node": ">=1.0.0"
+  },
+  "scripts": {
+    "dev": "nodemon --inspect --exec tsx src/app.ts",
+    "dev:gui": "electronmon -r tsx scripts/main.ts",
+    "dev:gui-vite": "cross-env VITE_DEV=1 electronmon -r tsx scripts/main.ts",
+    "start": "cross-env NODE_ENV=prod node data/serve/app.js",
+    "lint": "tsc --noEmit",
+    "build": "cross-env NODE_ENV=prod tsx scripts/build.ts",
+    "pack": "electron-builder --dir",
+    "dist": "yarn build && electron-builder",
+    "dist:win": "yarn build && electron-builder --win",
+    "dist:mac": "yarn build && electron-builder --mac",
+    "dist:linux": "yarn build && electron-builder --linux",
+    "debug:ai": "npx @ai-sdk/devtools",
+    "license": "node scripts/license.ts",
+    "vendor2json": "node scripts/vendor2json.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.35",
+    "@ai-sdk/deepseek": "^2.0.17",
+    "@ai-sdk/devtools": "^0.0.11",
+    "@ai-sdk/google": "^3.0.20",
+    "@ai-sdk/openai": "^3.0.25",
+    "@ai-sdk/openai-compatible": "^2.0.27",
+    "@ai-sdk/xai": "^3.0.47",
+    "@huggingface/transformers": "^3.8.1",
+    "@rmp135/sql-ts": "^2.2.0",
+    "ai": "^6.0.67",
+    "axios": "^1.13.2",
+    "axios-retry": "^4.5.0",
+    "better-sqlite3": "^12.9.0",
+    "compressing": "^2.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "express-ws": "^5.0.2",
+    "fast-glob": "^3.3.3",
+    "form-data": "^4.0.5",
+    "graphlib": "^2.1.8",
+    "is-path-inside": "^4.0.0",
+    "js-md5": "^0.8.3",
+    "jsonwebtoken": "^9.0.3",
+    "knex": "^3.2.5",
+    "lodash": "^4.17.23",
+    "morgan": "^1.10.1",
+    "p-limit": "^7.3.0",
+    "qwen-ai-provider-v5": "^2.1.0",
+    "serialize-error": "^13.0.1",
+    "sharp": "^0.34.5",
+    "socket.io": "^4.8.3",
+    "sqlite3": "^6.0.1",
+    "sucrase": "^3.35.1",
+    "uuid": "^13.0.0",
+    "vercel-minimax-ai-provider": "^0.0.2",
+    "vm2": "^3.10.5",
+    "zhipu-ai-provider": "^0.2.2",
+    "zod": "^4.3.5"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/express-ws": "^3.0.6",
+    "@types/graphlib": "^2.1.12",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/license-checker": "^25.0.6",
+    "@types/lodash": "^4.17.24",
+    "@types/morgan": "^1.9.10",
+    "cross-env": "^10.1.0",
+    "electron": "^40.0.0",
+    "electron-builder": "^26.4.0",
+    "electron-rebuild": "^3.2.9",
+    "electronmon": "^2.0.4",
+    "license-checker": "^25.0.1",
+    "nodemon": "^3.1.11",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "@rmp135/sql-ts": {
+      "better-sqlite3": "^12.8.0"
+    }
+  }
+}

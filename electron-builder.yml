@@ -1,0 +1,66 @@
+appId: net.toonflow.www
+productName: ToonFlow
+copyright: Copyright © 2026
+
+directories:
+  output: dist
+  buildResources: build
+
+files:
+  - build/**/*
+  - scripts/web/**/*
+  - env/**/*
+  - package.json
+  - node_modules/**/*
+  - "!node_modules/**/*.{md,ts,map}"
+  - "!node_modules/**/LICENSE*"
+  - "!node_modules/**/{README,readme}*"
+  - "!**/*.d.ts"
+  - "!src/**/*"
+  - "!scripts/**/*.ts"
+  - "!scripts/*.ts"
+
+asar: true
+asarUnpack:
+  - "**/node_modules/sharp/**"
+  - "**/node_modules/@img/**"
+
+extraResources:
+  - from: data
+    to: data
+    filter:
+      - "**/*"
+      - "!db2.sqlite"
+      - "!logs/**"
+      - "!oss/**"
+
+win:
+  target:
+    - target: nsis
+  icon: ./scripts/logo.ico
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  perMachine: true
+  shortcutName: ${productName}
+  artifactName: ${productName}-${version}-win-${arch}-setup.${ext}
+  installerIcon: './scripts/logo.ico'
+  uninstallerIcon: './scripts/logo.ico'
+  include: ./scripts/installer.nsh
+
+mac:
+  target:
+    - target: dmg
+  icon: ./scripts/logo.icns
+  category: public.app-category.developer-tools
+  artifactName: ${productName}-${version}-mac-${arch}.${ext}
+
+linux:
+  target:
+    - target: AppImage
+  icon: ./scripts/logo.png
+  artifactName: ${productName}-${version}-linux-${arch}.${ext}
+  category: Development
+
+publish: null

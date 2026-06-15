@@ -1,0 +1,14 @@
+{
+  "ignore": [
+    "node_modules",
+    "data/*",
+    "build/*",
+    "dist/*",
+    "router.ts",
+    "database.d.ts"
+  ],
+  "events": {
+    "restart": ""
+  },
+  "delay": 0
+}

@@ -1,0 +1,333 @@
+Name: @ai-sdk/anthropic
+License: Apache-2.0
+Repository: https://github.com/vercel/ai
+
+-----------------------------
+
+Name: @ai-sdk/deepseek
+License: Apache-2.0
+Repository: https://github.com/vercel/ai
+
+-----------------------------
+
+Name: @ai-sdk/devtools
+License: MIT*
+Repository: N/A
+
+-----------------------------
+
+Name: @ai-sdk/google
+License: Apache-2.0
+Repository: https://github.com/vercel/ai
+
+-----------------------------
+
+Name: @ai-sdk/openai-compatible
+License: Apache-2.0
+Repository: https://github.com/vercel/ai
+
+-----------------------------
+
+Name: @ai-sdk/openai
+License: Apache-2.0
+Repository: https://github.com/vercel/ai
+
+-----------------------------
+
+Name: @ai-sdk/xai
+License: Apache-2.0
+Repository: https://github.com/vercel/ai
+
+-----------------------------
+
+Name: @huggingface/transformers
+License: Apache-2.0
+Repository: https://github.com/huggingface/transformers.js
+
+-----------------------------
+
+Name: @rmp135/sql-ts
+License: MIT
+Repository: https://github.com/rmp135/sql-ts
+
+-----------------------------
+
+Name: @types/cors
+License: MIT
+Repository: https://github.com/DefinitelyTyped/DefinitelyTyped
+
+-----------------------------
+
+Name: @types/express-ws
+License: MIT
+Repository: https://github.com/DefinitelyTyped/DefinitelyTyped
+
+-----------------------------
+
+Name: @types/express
+License: MIT
+Repository: https://github.com/DefinitelyTyped/DefinitelyTyped
+
+-----------------------------
+
+Name: @types/graphlib
+License: MIT
+Repository: https://github.com/DefinitelyTyped/DefinitelyTyped
+
+-----------------------------
+
+Name: @types/jsonwebtoken
+License: MIT
+Repository: https://github.com/DefinitelyTyped/DefinitelyTyped
+
+-----------------------------
+
+Name: @types/license-checker
+License: MIT
+Repository: https://github.com/DefinitelyTyped/DefinitelyTyped
+
+-----------------------------
+
+Name: @types/lodash
+License: MIT
+Repository: https://github.com/DefinitelyTyped/DefinitelyTyped
+
+-----------------------------
+
+Name: @types/morgan
+License: MIT
+Repository: https://github.com/DefinitelyTyped/DefinitelyTyped
+
+-----------------------------
+
+Name: ai
+License: Apache-2.0
+Repository: https://github.com/vercel/ai
+
+-----------------------------
+
+Name: axios-retry
+License: Apache-2.0
+Repository: https://github.com/softonic/axios-retry
+
+-----------------------------
+
+Name: axios
+License: MIT
+Repository: https://github.com/axios/axios
+
+-----------------------------
+
+Name: better-sqlite3
+License: MIT
+Repository: https://github.com/WiseLibs/better-sqlite3
+
+-----------------------------
+
+Name: compressing
+License: MIT
+Repository: https://github.com/node-modules/compressing
+
+-----------------------------
+
+Name: cors
+License: MIT
+Repository: https://github.com/expressjs/cors
+
+-----------------------------
+
+Name: cross-env
+License: MIT
+Repository: https://github.com/kentcdodds/cross-env
+
+-----------------------------
+
+Name: dotenv
+License: BSD-2-Clause
+Repository: https://github.com/motdotla/dotenv
+
+-----------------------------
+
+Name: electron-builder
+License: MIT
+Repository: https://github.com/electron-userland/electron-builder
+
+-----------------------------
+
+Name: electron-rebuild
+License: MIT
+Repository: https://github.com/electron/electron-rebuild
+
+-----------------------------
+
+Name: electron
+License: MIT
+Repository: https://github.com/electron/electron
+
+-----------------------------
+
+Name: electronmon
+License: ISC
+Repository: https://github.com/catdad/electronmon
+
+-----------------------------
+
+Name: express-ws
+License: BSD-2-Clause
+Repository: https://github.com/HenningM/express-ws
+
+-----------------------------
+
+Name: express
+License: MIT
+Repository: https://github.com/expressjs/express
+
+-----------------------------
+
+Name: fast-glob
+License: MIT
+Repository: https://github.com/mrmlnc/fast-glob
+
+-----------------------------
+
+Name: form-data
+License: MIT
+Repository: https://github.com/form-data/form-data
+
+-----------------------------
+
+Name: graphlib
+License: MIT
+Repository: https://github.com/dagrejs/graphlib
+
+-----------------------------
+
+Name: is-path-inside
+License: MIT
+Repository: https://github.com/sindresorhus/is-path-inside
+
+-----------------------------
+
+Name: js-md5
+License: MIT
+Repository: https://github.com/emn178/js-md5
+
+-----------------------------
+
+Name: jsonwebtoken
+License: MIT
+Repository: https://github.com/auth0/node-jsonwebtoken
+
+-----------------------------
+
+Name: knex
+License: MIT
+Repository: https://github.com/knex/knex
+
+-----------------------------
+
+Name: license-checker
+License: BSD-3-Clause
+Repository: https://github.com/davglass/license-checker
+
+-----------------------------
+
+Name: lodash
+License: MIT
+Repository: https://github.com/lodash/lodash
+
+-----------------------------
+
+Name: morgan
+License: MIT
+Repository: https://github.com/expressjs/morgan
+
+-----------------------------
+
+Name: nodemon
+License: MIT
+Repository: https://github.com/remy/nodemon
+
+-----------------------------
+
+Name: p-limit
+License: MIT
+Repository: https://github.com/sindresorhus/p-limit
+
+-----------------------------
+
+Name: qwen-ai-provider-v5
+License: Apache-2.0
+Repository: https://github.com/bolechen/qwen-ai-provider-v5
+
+-----------------------------
+
+Name: serialize-error
+License: MIT
+Repository: https://github.com/sindresorhus/serialize-error
+
+-----------------------------
+
+Name: sharp
+License: Apache-2.0
+Repository: https://github.com/lovell/sharp
+
+-----------------------------
+
+Name: socket.io
+License: MIT
+Repository: https://github.com/socketio/socket.io
+
+-----------------------------
+
+Name: sqlite3
+License: BSD-3-Clause
+Repository: https://github.com/TryGhost/node-sqlite3
+
+-----------------------------
+
+Name: sucrase
+License: MIT
+Repository: https://github.com/alangpierce/sucrase
+
+-----------------------------
+
+Name: tsx
+License: MIT
+Repository: https://github.com/privatenumber/tsx
+
+-----------------------------
+
+Name: typescript
+License: Apache-2.0
+Repository: https://github.com/microsoft/TypeScript
+
+-----------------------------
+
+Name: uuid
+License: MIT
+Repository: https://github.com/uuidjs/uuid
+
+-----------------------------
+
+Name: vercel-minimax-ai-provider
+License: Apache-2.0
+Repository: https://github.com/MiniMax-AI/vercel-minimax-ai-provider
+
+-----------------------------
+
+Name: vm2
+License: MIT
+Repository: https://github.com/patriksimek/vm2
+
+-----------------------------
+
+Name: zhipu-ai-provider
+License: Apache-2.0
+Repository: https://github.com/Xiang-CH/zhipu-ai-provider
+
+-----------------------------
+
+Name: zod
+License: MIT
+Repository: https://github.com/colinhacks/zod
