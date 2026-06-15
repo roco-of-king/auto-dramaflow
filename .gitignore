@@ -47,9 +47,8 @@ web/*
 
 *.sqlite
 
-router.ts
-
-database.d.ts
+# router.ts
+# database.d.ts
 
 .devtools
 data/oss/*
