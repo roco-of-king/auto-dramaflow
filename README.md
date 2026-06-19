@@ -233,7 +233,7 @@ docker run -d -p <本地端口>:10588 -v <本地数据路径>:/app/data auto-dra
 ### 一、服务器环境要求
 
 - **系统**：Ubuntu 20.04+ / CentOS 7+
-- **Node.js**：22.x（推荐）
+- **Node.js**：23.x（推荐）
 - **内存**：2GB+
 
 ### 二、服务器部署
@@ -244,7 +244,7 @@ docker run -d -p <本地端口>:10588 -v <本地数据路径>:/app/data auto-dra
 # 安装 Node.js
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 source ~/.bashrc
-nvm install 22
+nvm install 23
 # 安装 Yarn 和 PM2
 npm install -g yarn pm2
 ```
