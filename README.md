@@ -29,7 +29,7 @@
   > 🚀 **一站式短剧工程**：从文本到角色，从分镜到视频，0门槛全流程AI化，创作效率提升10倍+！
   >
   > 本项目基于 [Toonflow](https://github.com/HBAI-Ltd/Toonflow-app) 进行二次开发，新增了**阿里云百炼(DashScope)通义千问模型**支持及**独立素材上传页面**等功能。
-  >
+
   > 新功能在dev分支，目前正在测试中，想体验新功能的可以自行拉取，如发现bug可及时提Issues或者Discussions。 
 </div>
 
