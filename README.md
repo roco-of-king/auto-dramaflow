@@ -198,7 +198,7 @@ POST /api/assets/uploadAssetImage
 
 ```shell
 # 克隆项目
-git clone https://github.com/<your-username>/auto-dramaflow.git
+git clone https://github.com/top0-github/auto-dramaflow.git
 cd auto-dramaflow
 
 # 使用 docker-compose 本地构建并启动
@@ -233,7 +233,7 @@ docker run -d -p <本地端口>:10588 -v <本地数据路径>:/app/data auto-dra
 ### 一、服务器环境要求
 
 - **系统**：Ubuntu 20.04+ / CentOS 7+
-- **Node.js**：24.x（推荐，最低 23.11.1+）
+- **Node.js**：23.x（推荐）
 - **内存**：2GB+
 
 ### 二、服务器部署
@@ -244,7 +244,7 @@ docker run -d -p <本地端口>:10588 -v <本地数据路径>:/app/data auto-dra
 # 安装 Node.js
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 source ~/.bashrc
-nvm install 24
+nvm install 23
 # 安装 Yarn 和 PM2
 npm install -g yarn pm2
 ```
@@ -253,7 +253,7 @@ npm install -g yarn pm2
 
 ```bash
 cd /opt
-git clone https://github.com/<your-username>/auto-dramaflow.git
+git clone https://github.com/top0-github/auto-dramaflow.git
 cd auto-dramaflow
 yarn install
 yarn build
@@ -327,7 +327,7 @@ pm2 monit                # 监控面板
 1. **克隆项目**
 
    ```bash
-   git clone https://github.com/<your-username>/auto-dramaflow.git
+   git clone https://github.com/top0-github/auto-dramaflow.git
    cd auto-dramaflow
    ```
 
