@@ -499,6 +499,21 @@ export default async (knex: Knex, forceInit: boolean = false): Promise<void> => 
         table.integer("flowId"); //工作流id
         table.integer("index");
         table.integer("createTime");
+        // 首尾帧图片
+        table.text("firstFramePath"); // 首帧图 OSS 路径
+        table.text("lastFramePath"); // 尾帧图 OSS 路径
+        // 首尾帧生成提示词
+        table.text("firstFramePrompt"); // 首帧图生成 prompt
+        table.text("lastFramePrompt"); // 尾帧图生成 prompt
+        // 首尾帧状态文本
+        table.text("firstFrameState"); // Agent 输出的首帧视觉状态描述
+        table.text("lastFrameState"); // Agent 输出的尾帧视觉状态描述
+        // 分镜间衔接
+        table.integer("extendsFromId"); // 源分镜 ID（视频延长），NULL=独立分镜
+        table.text("inTransitionDesc"); // 入场衔接描述
+        table.text("outTransitionDesc"); // 出场衔接描述
+        // 模型模式标记
+        table.text("modelMode"); // "text"|"firstFrame"|"firstLastFrame"|"multiModal"|...
         table.primary(["id"]);
         table.unique(["id"]);
       },
@@ -530,6 +545,11 @@ export default async (knex: Knex, forceInit: boolean = false): Promise<void> => 
         table.integer("scriptId");
         table.integer("projectId");
         table.integer("videoTrackId");
+        // 视频生成元信息
+        table.text("mode"); // 生成该视频时使用的模式
+        table.integer("sourceVideoId"); // 延长/编辑的源视频
+        table.integer("generationRound").defaultTo(1); // 第几次生成
+        table.integer("userDeleted").defaultTo(0); // 软删除标记
         table.primary(["id"]);
         table.unique(["id"]);
       },
@@ -547,6 +567,11 @@ export default async (knex: Knex, forceInit: boolean = false): Promise<void> => 
         table.text("prompt");
         table.integer("selectVideoId");
         table.integer("duration");
+        // 视频生成模式
+        table.text("modelMode"); // 当前轨道使用的视频模式
+        table.integer("sourceVideoId"); // 延长/编辑模式下的源视频 ID
+        table.integer("extensionDuration"); // 延长秒数（新增时长，非总时长）
+        table.integer("storyboardId"); // 关联的分镜 ID（显式关联）
         table.primary(["id"]);
         table.unique(["id"]);
       },
