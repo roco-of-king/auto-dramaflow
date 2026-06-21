@@ -84,7 +84,7 @@ export default router.post(
     //把flatImages里面的图片转成base64格式
     const base64 = await Promise.all(
       flatImages.map(async (item) => {
-        if (!item) return null;
+        if (!item || !item.path) return null;
         const type = item.sources === "firstFrame" || item.sources === "lastFrame" ? "image" :
           item.sources === "audio" ? "audio" : "image";
         return { base64: await u.oss.getImageBase64(item.path), type };
@@ -100,6 +100,8 @@ export default router.post(
       projectId,
       videoTrackId: trackId,
       mode: typeof activeMode === "string" ? activeMode : "multiModal",
+      generationRound: 1,
+      userDeleted: 0,
     });
     res.status(200).send(success(videoId));
     const relatedObjects = {

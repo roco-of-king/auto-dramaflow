@@ -100,6 +100,8 @@ export default router.post(
           projectId,
           videoTrackId: trackId,
           mode: typeof activeMode === "string" ? activeMode : "multiModal",
+          generationRound: 1,
+          userDeleted: 0,
         });
 
         return { videoId, videoPath, prompt, duration, images: images.flat(), trackId };
@@ -111,7 +113,7 @@ export default router.post(
       // 所有任务全部并发后台执行，完全不阻塞任何进程
       const base64 = await Promise.all(
         images.map(async (item) => {
-          if (!item) return null;
+          if (!item || !item.path) return null;
           return { base64: await u.oss.getImageBase64(item.path), type: item.sources == "audio" ? "audio" : "image" };
         }),
       );

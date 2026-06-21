@@ -226,17 +226,18 @@ export default router.post(
             .join("，")},
           **分镜信息**：${storyboard.map(
             (i) => {
+              const esc = (s: string) => s.replace(/'/g, "\\'").replace(/\n/g, "\\n");
               const extraAttrs = [
-                i.firstFrameState ? `firstFrameState='${i.firstFrameState}'` : "",
-                i.lastFrameState ? `lastFrameState='${i.lastFrameState}'` : "",
-                i.firstFramePrompt ? `firstFramePrompt='${i.firstFramePrompt}'` : "",
-                i.lastFramePrompt ? `lastFramePrompt='${i.lastFramePrompt}'` : "",
-                i.inTransitionDesc ? `inTransitionDesc='${i.inTransitionDesc}'` : "",
-                i.outTransitionDesc ? `outTransitionDesc='${i.outTransitionDesc}'` : "",
+                i.firstFrameState ? `firstFrameState='${esc(i.firstFrameState)}'` : "",
+                i.lastFrameState ? `lastFrameState='${esc(i.lastFrameState)}'` : "",
+                i.firstFramePrompt ? `firstFramePrompt='${esc(i.firstFramePrompt)}'` : "",
+                i.lastFramePrompt ? `lastFramePrompt='${esc(i.lastFramePrompt)}'` : "",
+                i.inTransitionDesc ? `inTransitionDesc='${esc(i.inTransitionDesc)}'` : "",
+                i.outTransitionDesc ? `outTransitionDesc='${esc(i.outTransitionDesc)}'` : "",
                 i.modelMode ? `modelMode='${i.modelMode}'` : "",
               ].filter(Boolean).join("\n  ");
               return `<storyboardItem
-  videoDesc='${i.videoDesc}'
+  videoDesc='${esc(i.videoDesc)}'
   ${extraAttrs ? extraAttrs + "\n  " : ""}duration='${i.duration}'
 ></storyboardItem>`;
             },
