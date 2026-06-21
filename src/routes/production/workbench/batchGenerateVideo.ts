@@ -60,10 +60,21 @@ export default router.post(
       (trackData as { uploadData: { id: number; sources: string }[]; trackId: number; prompt: string; duration: number }[]).map(async (track) => {
         const { uploadData, trackId, prompt, duration } = track;
 
-        // 查询出图片数据
+        // 查询出图片数据（根据 mode 选择不同的查询路径）
+        const isDualFrame = (modeData.length > 0 ? modeData[0] : mode) === "firstLastFrame" || mode === "firstLastFrame";
         const images = await Promise.all(
           uploadData.map(async (item) => {
             if (item.sources === "storyboard") {
+              if (isDualFrame) {
+                const frameData = await u.db("o_storyboard")
+                  .where("id", item.id)
+                  .select("firstFramePath", "lastFramePath")
+                  .first();
+                return [
+                  { path: frameData?.firstFramePath, sources: "firstFrame" },
+                  { path: frameData?.lastFramePath, sources: "lastFrame" },
+                ];
+              }
               const filePath = await u.db("o_storyboard").where("id", item.id).select("filePath").first();
               return { path: filePath?.filePath, sources: "storyBoard" };
             }
@@ -80,6 +91,7 @@ export default router.post(
         );
 
         const videoPath = `/${projectId}/video/${uuidv4()}.mp4`;
+        const activeMode = modeData.length > 0 ? modeData[0] : mode;
         const [videoId] = await u.db("o_video").insert({
           filePath: videoPath,
           time: Date.now(),
@@ -87,9 +99,10 @@ export default router.post(
           scriptId,
           projectId,
           videoTrackId: trackId,
+          mode: typeof activeMode === "string" ? activeMode : "multiModal",
         });
 
-        return { videoId, videoPath, prompt, duration, images, trackId };
+        return { videoId, videoPath, prompt, duration, images: images.flat(), trackId };
       }),
     );
 

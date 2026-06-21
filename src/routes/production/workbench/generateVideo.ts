@@ -49,10 +49,22 @@ export default router.post(
     //获取生成视频比例
     const ratio = await u.db("o_project").select("videoRatio").where("id", projectId).first();
     const videoPath = `/${projectId}/video/${uuidv4()}.mp4`; //视频保存路径
-    //查询出图片数据
+    //查询出图片数据（根据 mode 选择不同的查询路径）
+    const isDualFrame = (modeData.length > 0 ? modeData[0] : mode) === "firstLastFrame" || mode === "firstLastFrame";
     const images = await Promise.all(
       uploadData.map(async (item: UploadItem) => {
         if (item.sources === "storyboard") {
+          if (isDualFrame) {
+            // 首尾帧模式：分别取 firstFramePath 和 lastFramePath
+            const frameData = await u.db("o_storyboard")
+              .where("id", item.id)
+              .select("firstFramePath", "lastFramePath")
+              .first();
+            return [
+              { path: frameData?.firstFramePath, sources: "firstFrame" },
+              { path: frameData?.lastFramePath, sources: "lastFrame" },
+            ];
+          }
           const filePath = await u.db("o_storyboard").where("id", item.id).select("filePath").first();
           return { path: filePath?.filePath, sources: "storyBoard" };
         }
@@ -67,14 +79,19 @@ export default router.post(
         }
       }),
     );
-    //把images里面的图片转成base64格式
+    // 展平首尾帧模式下的嵌套数组
+    const flatImages = images.flat();
+    //把flatImages里面的图片转成base64格式
     const base64 = await Promise.all(
-      images.map(async (item) => {
+      flatImages.map(async (item) => {
         if (!item) return null;
-        return { base64: await u.oss.getImageBase64(item.path), type: item.sources == "audio" ? "audio" : "image" };
+        const type = item.sources === "firstFrame" || item.sources === "lastFrame" ? "image" :
+          item.sources === "audio" ? "audio" : "image";
+        return { base64: await u.oss.getImageBase64(item.path), type };
       }),
     );
     //新增
+    const activeMode = modeData.length > 0 ? modeData[0] : mode;
     const [videoId] = await u.db("o_video").insert({
       filePath: videoPath,
       time: Date.now(),
@@ -82,6 +99,7 @@ export default router.post(
       scriptId,
       projectId,
       videoTrackId: trackId,
+      mode: typeof activeMode === "string" ? activeMode : "multiModal",
     });
     res.status(200).send(success(videoId));
     const relatedObjects = {
