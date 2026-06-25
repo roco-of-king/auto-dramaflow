@@ -1,4 +1,5 @@
 import express from "express";
+import u from "@/utils";
 import { success, error } from "@/lib/responseFormat";
 import { validateFields } from "@/middleware/middleware";
 import { z } from "zod";
@@ -27,6 +28,12 @@ export default router.post(
   }),
   async (req, res) => {
     const { source, url } = req.body;
+
+    // 检查是否跳过更新检查
+    const skipUpdateCheck = await u.db("o_setting").where("key", "skipUpdateCheck").first();
+    if (skipUpdateCheck?.value === "1") {
+      return res.status(200).send(success({ needUpdate: false, skipped: true }));
+    }
 
     const getUrl = url ?? "https://toonflow.oss-cn-beijing.aliyuncs.com/update.json";
 

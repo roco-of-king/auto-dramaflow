@@ -312,6 +312,10 @@ export default async (knex: Knex, forceInit: boolean = false): Promise<void> => 
             key: "switchAiDevTool",
             value: "0",
           },
+          {
+            key: "skipUpdateCheck",
+            value: "0",
+          },
         ]);
       },
     },
