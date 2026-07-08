@@ -35,10 +35,11 @@ export default router.post(
     resolution: z.string(),
     duration: z.number(),
     audio: z.boolean().optional(),
+    sourceVideoId: z.number().optional(),
     trackId: z.number(),
   }),
   async (req, res) => {
-    const { scriptId, projectId, prompt, uploadData, model, duration, resolution, audio, mode, trackId } = req.body;
+    const { scriptId, projectId, prompt, uploadData, model, duration, resolution, audio, mode, sourceVideoId, trackId } = req.body;
     let modeData = [];
     if (Array.isArray(mode)) {
     } else if (typeof mode === "string" && mode.startsWith('["') && mode.endsWith('"]')) {
@@ -90,8 +91,19 @@ export default router.post(
         return { base64: await u.oss.getImageBase64(item.path), type };
       }),
     );
-    //新增
+    // 视频延长/编辑模式：加载源视频
     const activeMode = modeData.length > 0 ? modeData[0] : mode;
+    const isExtOrEdit = activeMode === "videoExtension" || activeMode === "videoEditing";
+    if (isExtOrEdit && sourceVideoId) {
+      const srcVideo = await u.db("o_video").where("id", sourceVideoId).select("filePath").first();
+      if (srcVideo?.filePath) {
+        try {
+          const videoUrl = await u.oss.getFileUrl(srcVideo.filePath);
+          base64.push({ base64: videoUrl, type: "video" });
+        } catch { /* 源视频加载失败，跳过 */ }
+      }
+    }
+    //新增视频记录
     const [videoId] = await u.db("o_video").insert({
       filePath: videoPath,
       time: Date.now(),
