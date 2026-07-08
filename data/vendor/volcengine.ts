@@ -247,7 +247,7 @@ const vendor: VendorConfig = {
       name: "Seedance-1.5-Pro(音画同生)",
       modelName: "doubao-seedance-1-5-pro-251215",
       type: "video",
-      mode: ["text", "firstFrame", "firstLastFrame"],
+      mode: ["text", "firstFrame"],
       audio: "optional",
       durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],
     },
