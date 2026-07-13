@@ -183,10 +183,20 @@ export interface o_skillList {
 export interface o_storyboard {
   'createTime'?: number | null;
   'duration'?: string | null;
+  'extendsFromId'?: number | null;
   'filePath'?: string | null;
+  'firstFramePath'?: string | null;
+  'firstFramePrompt'?: string | null;
+  'firstFrameState'?: string | null;
   'flowId'?: number | null;
   'id'?: number;
+  'inTransitionDesc'?: string | null;
   'index'?: number | null;
+  'lastFramePath'?: string | null;
+  'lastFramePrompt'?: string | null;
+  'lastFrameState'?: string | null;
+  'modelMode'?: string | null;
+  'outTransitionDesc'?: string | null;
   'projectId'?: number | null;
   'prompt'?: string | null;
   'reason'?: string | null;
@@ -222,22 +232,30 @@ export interface o_vendorConfig {
 export interface o_video {
   'errorReason'?: string | null;
   'filePath'?: string | null;
+  'generationRound'?: number | null;
   'id'?: number;
+  'mode'?: string | null;
   'projectId'?: number | null;
   'scriptId'?: number | null;
+  'sourceVideoId'?: number | null;
   'state'?: string | null;
   'time'?: number | null;
+  'userDeleted'?: number | null;
   'videoTrackId'?: number | null;
 }
 export interface o_videoTrack {
   'duration'?: number | null;
+  'extensionDuration'?: number | null;
   'id'?: number;
+  'modelMode'?: string | null;
   'projectId'?: number | null;
   'prompt'?: string | null;
   'reason'?: string | null;
   'scriptId'?: number | null;
   'selectVideoId'?: number | null;
+  'sourceVideoId'?: number | null;
   'state'?: string | null;
+  'storyboardId'?: number | null;
   'videoId'?: number | null;
 }
 

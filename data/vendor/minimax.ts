@@ -1,5 +1,5 @@
 /**
- * Toonflow AI供应商模板 - MiniMax(海螺AI)
+ * Auto-Dramaflow AI供应商模板 - MiniMax(海螺AI)
  * @version 2.0
  */
 

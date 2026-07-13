@@ -1,0 +1,51 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "纪录片的声音应该保持客观真实还是可以做主观化处理？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "混录中对白和音效冲突，怎么用能量模型判断优先级？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "为一个有道德困境的角色设计声音主题，声音应该让人同情还是反感？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "声音的物理能量（音量）、情感能量（紧张度）和叙事能量（戏剧张力）这四个层面怎么和故事的情感弧线匹配？",
+    "expected_behavior": "应激活此skill",
+    "expected": "应激活——用户在讨论声音四层能量模型与叙事弧线的匹配"
+  },
+  {
+    "id": "should-not-trigger-01",
+    "type": "should_not_trigger",
+    "prompt": "画面的色彩能量怎么控制？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-02",
+    "type": "should_not_trigger",
+    "prompt": "演员的表演能量怎么指导？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-03",
+    "type": "should_not_trigger",
+    "prompt": "音乐的音量大小怎么调？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "edge-01",
+    "type": "edge_case",
+    "prompt": "动画片中夸张的声音设计还需要遵循能量模型的真实性原则吗？",
+    "expected_behavior": "应部分激活"
+  }
+]

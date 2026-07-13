@@ -1,0 +1,1 @@
+Game items as inventory screen captures. Weapons with stat overlays, potions with quantity counters, quest items with description boxes. Template: "In-game item inspection screen. [Item] with [rarity color] border. Stats panel: [fictional stats]. AAA game UI quality."

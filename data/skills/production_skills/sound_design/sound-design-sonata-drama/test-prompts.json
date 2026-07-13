@@ -1,0 +1,51 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "怎么用奏鸣曲式来设计电影声音的戏剧结构？呈示、发展、再现怎么对应？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "角色的声音主题需要在影片中发生变化，怎么渐进式演变？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "结尾需要'回家'的感觉，声音怎么实现这种奏鸣曲式的回归？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "声音的'呈示-发展-再现'结构怎么对应故事的三幕？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-not-trigger-01",
+    "type": "should_not_trigger",
+    "prompt": "剧本的三幕结构怎么写？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-02",
+    "type": "should_not_trigger",
+    "prompt": "角色的视觉弧线怎么设计？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-03",
+    "type": "should_not_trigger",
+    "prompt": "我正在写一首钢琴奏鸣曲，呈示部的主题该怎么发展？属调转调的规则是什么？",
+    "expected_behavior": "不应激活——与其他skill相关",
+    "expected": "不应激活——用户在做纯器乐作曲，不是用奏鸣曲式映射电影戏剧结构"
+  },
+  {
+    "id": "edge-01",
+    "type": "edge_case",
+    "prompt": "非线性叙事的电影中声音弧线怎么设计？还能用奏鸣曲式吗？",
+    "expected_behavior": "应部分激活"
+  }
+]

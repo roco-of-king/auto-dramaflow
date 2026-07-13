@@ -1,0 +1,1 @@
+Fashion model character. Templates: Studio portrait (85mm f/2.8, softbox key, rim light, clean backdrop). Street lookbook (35mm, neon bokeh, wet pavement). Runway (50mm, deep DOF, brutalist architecture). Natural/skin tones must be accurate, no over-filtering.

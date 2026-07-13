@@ -1,0 +1,1 @@
+Editorial location photography. Templates: (1) Shibuya crossing at twilight — neon bokeh, wet reflections. (2) English country estate — golden hour, manicured lawn, vintage convertible. (3) Brutalist concrete cathedral — single spotlight, cold vast scale. (4) Surreal white-sand desert — indigo sky, bioluminescent glow.

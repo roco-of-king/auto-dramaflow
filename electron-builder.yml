@@ -1,6 +1,6 @@
-appId: net.toonflow.www
-productName: ToonFlow
-copyright: Copyright © 2026
+appId: com.auto-dramaflow.app
+productName: Auto-Dramaflow
+copyright: Copyright © 2025 HBAI-Ltd, modifications © 2026 roco-of-king
 
 directories:
   output: dist

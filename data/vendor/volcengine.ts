@@ -1,5 +1,5 @@
 /**
- * Toonflow AI供应商模板 - 火山引擎(豆包)
+ * Auto-Dramaflow AI供应商模板 - 火山引擎(豆包)
  * @version 2.0
  */
 
@@ -8,11 +8,18 @@
 // ============================================================
 
 type VideoMode =
+  | "text"                          // 纯文生视频
+  | "firstFrame"                    // 首帧图生视频（1张图），替代 singleImage/startFrameOptional/endFrameOptional
+  | "firstLastFrame"                // 首尾帧图生视频（2张图），替代 startEndRequired
+  | "multiModal"                    // 多模态参考（图+视频+音频混合）
+  | "videoExtension"                // 视频延长（源视频+时间轴分段描述）
+  | "videoEditing"                  // 视频编辑（源视频+编辑指令）
+  // 旧版兼容（内部映射到新模式）
   | "singleImage"
   | "startEndRequired"
   | "endFrameOptional"
   | "startFrameOptional"
-  | "text"
+  // 多模态数量限制数组
   | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];
 
 interface TextModel {
@@ -216,7 +223,7 @@ const vendor: VendorConfig = {
       name: "Seedance-2.0(音画同生)",
       modelName: "doubao-seedance-2-0-260128",
       type: "video",
-      mode: ["text", "startFrameOptional", ["imageReference:9", "videoReference:3", "audioReference:3"]],
+      mode: ["text", "firstFrame", "firstLastFrame", "multiModal", "videoExtension", "videoEditing"],
       audio: "optional",
       durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p"] }],
     },
@@ -224,15 +231,23 @@ const vendor: VendorConfig = {
       name: "Seedance-2.0-Fast(音画同生)",
       modelName: "doubao-seedance-2-0-fast-260128",
       type: "video",
-      mode: ["text", "startFrameOptional", ["imageReference:9", "videoReference:3", "audioReference:3"]],
+      mode: ["text", "firstFrame", "firstLastFrame", "multiModal", "videoExtension", "videoEditing"],
       audio: "optional",
       durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p"] }],
+    },
+    {
+      name: "Seedance-2.0-Mini(音画同生)",
+      modelName: "doubao-seedance-2-0-mini-260128",
+      type: "video",
+      mode: ["text", "firstFrame", "firstLastFrame", "multiModal", "videoExtension", "videoEditing"],
+      audio: "optional",
+      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10], resolution: ["480p", "720p"] }],
     },
     {
       name: "Seedance-1.5-Pro(音画同生)",
       modelName: "doubao-seedance-1-5-pro-251215",
       type: "video",
-      mode: ["text", "startFrameOptional"],
+      mode: ["text", "firstFrame"],
       audio: "optional",
       durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],
     },
@@ -240,7 +255,7 @@ const vendor: VendorConfig = {
       name: "Seedance-1.0-Pro",
       modelName: "doubao-seedance-1-0-pro-250528",
       type: "video",
-      mode: ["text", "startFrameOptional"],
+      mode: ["text", "firstFrame"],
       audio: false,
       durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],
     },
@@ -248,7 +263,7 @@ const vendor: VendorConfig = {
       name: "Seedance-1.0-Pro-Fast",
       modelName: "doubao-seedance-1-0-pro-fast-251015",
       type: "video",
-      mode: ["text", "singleImage"],
+      mode: ["text", "firstFrame"],
       audio: false,
       durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],
     },
@@ -264,7 +279,7 @@ const vendor: VendorConfig = {
       name: "Seedance-1.0-Lite-I2V",
       modelName: "doubao-seedance-1-0-lite-i2v-250428",
       type: "video",
-      mode: ["startFrameOptional", ["imageReference:4"]],
+      mode: ["firstFrame", "multiModal"],
       audio: false,
       durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],
     },
@@ -456,18 +471,12 @@ const videoRequest = async (config: VideoConfig, model: VideoModel): Promise<str
 
   if (typeof config.mode === "string") {
     switch (config.mode) {
-      case "singleImage": {
-        const firstImage = config.referenceList?.find((r) => r.type === "image");
-        if (firstImage) {
-          content.push({
-            type: "image_url",
-            image_url: { url: firstImage.base64 },
-            role: "first_frame",
-          });
-        }
-        break;
-      }
-      case "startFrameOptional": {
+      // ── 新模式：首帧图生视频（1张图） ──
+      case "firstFrame":
+      // 旧版兼容
+      case "singleImage":
+      case "startFrameOptional":
+      case "endFrameOptional": {
         const images = config.referenceList?.filter((r) => r.type === "image") ?? [];
         if (images.length > 0) {
           content.push({
@@ -475,6 +484,7 @@ const videoRequest = async (config: VideoConfig, model: VideoModel): Promise<str
             image_url: { url: images[0].base64 },
             role: "first_frame",
           });
+          // 如果传了第二张图且非 firstLastFrame 模式，作为可选尾帧
           if (images.length > 1) {
             content.push({
               type: "image_url",
@@ -485,6 +495,9 @@ const videoRequest = async (config: VideoConfig, model: VideoModel): Promise<str
         }
         break;
       }
+      // ── 新模式：首尾帧图生视频（2张图必填） ──
+      case "firstLastFrame":
+      // 旧版兼容
       case "startEndRequired": {
         const images = config.referenceList?.filter((r) => r.type === "image") ?? [];
         if (images.length >= 2) {
@@ -498,24 +511,74 @@ const videoRequest = async (config: VideoConfig, model: VideoModel): Promise<str
             image_url: { url: images[1].base64 },
             role: "last_frame",
           });
-        }
-        break;
-      }
-      case "endFrameOptional": {
-        const images = config.referenceList?.filter((r) => r.type === "image") ?? [];
-        if (images.length > 0) {
+        } else if (images.length > 0) {
+          // 降级：只有1张图当首帧
           content.push({
             type: "image_url",
             image_url: { url: images[0].base64 },
             role: "first_frame",
           });
-          if (images.length > 1) {
-            content.push({
-              type: "image_url",
-              image_url: { url: images[1].base64 },
-              role: "last_frame",
-            });
-          }
+        }
+        break;
+      }
+      // ── 新模式：视频延长 ──
+      case "videoExtension": {
+        const sourceVideo = config.referenceList?.find((r) => r.type === "video");
+        if (sourceVideo) {
+          content.push({
+            type: "video_url",
+            video_url: { url: sourceVideo.base64 },
+            role: "reference_video",
+          });
+        }
+        break;
+      }
+      // ── 新模式：视频编辑 ──
+      case "videoEditing": {
+        const sourceVideo = config.referenceList?.find((r) => r.type === "video");
+        if (sourceVideo) {
+          content.push({
+            type: "video_url",
+            video_url: { url: sourceVideo.base64 },
+            role: "reference_video",
+          });
+        }
+        // 编辑参考图（如替换用的新主体）
+        const editRefs = config.referenceList?.filter((r) => r.type === "image") ?? [];
+        for (const ref of editRefs) {
+          content.push({
+            type: "image_url",
+            image_url: { url: ref.base64 },
+            role: "reference_image",
+          });
+        }
+        break;
+      }
+      // ── 新模式：多模态参考（字符串模式，无数量限制） ──
+      case "multiModal": {
+        const imageRefs = config.referenceList?.filter((r) => r.type === "image") ?? [];
+        const videoRefs = config.referenceList?.filter((r) => r.type === "video") ?? [];
+        const audioRefs = config.referenceList?.filter((r) => r.type === "audio") ?? [];
+        for (const ref of imageRefs) {
+          content.push({
+            type: "image_url",
+            image_url: { url: ref.base64 },
+            role: "reference_image",
+          });
+        }
+        for (const ref of videoRefs) {
+          content.push({
+            type: "video_url",
+            video_url: { url: ref.base64 },
+            role: "reference_video",
+          });
+        }
+        for (const ref of audioRefs) {
+          content.push({
+            type: "audio_url",
+            audio_url: { url: ref.base64 },
+            role: "reference_audio",
+          });
         }
         break;
       }

@@ -1,9 +1,15 @@
 <!DOCTYPE html>
+<!--
+  Based on Toonflow (https://github.com/HBAI-Ltd/Toonflow-app)
+  Original work Copyright (c) 2025 HBAI-Ltd
+  Licensed under Apache 2.0 with supplementary terms.
+  Modified by roco-of-king, 2026 - 独立素材上传页面
+-->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>素材上传 - Toonflow</title>
+<title>素材上传 - Auto-Dramaflow</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:#f5f5f5; color:#333; }
@@ -23,6 +29,10 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; backg
 .btn-primary { background:#4a90d9; color:#fff; }
 .btn-primary:hover { opacity:0.9; }
 .btn-primary:disabled { opacity:0.5; cursor:not-allowed; }
+.btn-danger { background:#c62828; color:#fff; margin-top:8px; }
+.btn-danger:hover { opacity:0.9; }
+.btn-group { display:flex; gap:8px; }
+.btn-group .btn { flex:1; }
 .msg { padding:10px 14px; border-radius:6px; font-size:13px; margin-bottom:14px; display:none; }
 .msg-success { background:#e6f9e6; color:#2e7d32; display:block; }
 .msg-error { background:#fdecea; color:#c62828; display:block; }
@@ -56,45 +66,59 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; backg
   </div>
 
   <div class="card" id="uploadCard" style="display:none">
-    <h2>&#x1F4DD; 素材信息</h2>
+    <h2>&#x1F4DD; 上传配置</h2>
     <div id="msg"></div>
     <div class="form-group">
       <label>所属项目</label>
-      <select id="projectId"></select>
+      <select id="projectId" onchange="onProjectChange()"></select>
     </div>
     <div class="form-group">
-      <label>模式</label>
-      <select id="mode" onchange="toggleMode()">
-        <option value="new">新建素材并上传</option>
-        <option value="existing">关联已有素材</option>
+      <label>上传类别</label>
+      <select id="category" onchange="toggleCategory()">
+        <option value="asset">资产素材（角色/场景/道具）</option>
+        <option value="storyboard">分镜图片</option>
       </select>
     </div>
-    <div class="form-group" id="existingAssetGroup" style="display:none">
-      <label>选择已有素材</label>
-      <select id="assetId"><option value="">请先选择类型，加载素材列表</option></select>
-    </div>
-    <div class="form-group">
-      <label>素材类型</label>
-      <select id="type" onchange="onTypeChange()">
-        <option value="role">角色</option>
-        <option value="scene">场景</option>
-        <option value="tool">道具</option>
-      </select>
-    </div>
-    <div id="newAssetFields">
+
+    <!-- 资产素材区 -->
+    <div id="assetSection">
       <div class="form-group">
-        <label>素材名称</label>
-        <input type="text" id="name" placeholder="如：沈辞、城楼、长剑" />
+        <label>模式</label>
+        <select id="mode" onchange="toggleMode()">
+          <option value="new">新建素材并上传</option>
+          <option value="existing">关联已有素材</option>
+        </select>
+      </div>
+      <div class="form-group" id="existingAssetGroup" style="display:none">
+        <label>选择已有素材</label>
+        <select id="assetId"><option value="">请先选择类型</option></select>
       </div>
       <div class="form-group">
-        <label>视觉描述</label>
-        <textarea id="describe" placeholder="30-80字的视觉描述，如：黑衣少年，眉目清冷，身形修长..."></textarea>
+        <label>素材类型</label>
+        <select id="type" onchange="onTypeChange()">
+          <option value="role">角色</option>
+          <option value="scene">场景</option>
+          <option value="tool">道具</option>
+        </select>
       </div>
-      <div class="form-group">
-        <label>提示词（选填）</label>
-        <textarea id="prompt" placeholder="英文提示词，如：a young man in black robes, cold expression..."></textarea>
+      <div id="newAssetFields">
+        <div class="form-group"><label>素材名称</label><input type="text" id="name" placeholder="如：沈辞、城楼、长剑" /></div>
+        <div class="form-group"><label>视觉描述</label><textarea id="describe" placeholder="30-80字的视觉描述"></textarea></div>
+        <div class="form-group"><label>提示词（选填）</label><textarea id="prompt" placeholder="英文提示词"></textarea></div>
       </div>
     </div>
+
+    <!-- 分镜图片区 -->
+    <div id="storyboardSection" style="display:none">
+      <div class="form-group">
+        <label>选择分镜</label>
+        <select id="storyboardId" onchange="onStoryboardChange()"><option value="">请先选择项目</option></select>
+      </div>
+      <div id="storyboardInfo" style="font-size:13px;color:#666;margin-bottom:8px;display:none"></div>
+      <img id="sbPreview" class="preview" />
+      <button class="btn btn-danger" id="resetBtn" style="display:none" onclick="resetStoryboard()">移除当前图片，重新选择</button>
+    </div>
+
     <div class="form-group">
       <label>上传图片</label>
       <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
@@ -105,7 +129,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; backg
       <img id="preview" class="preview" />
       <button class="btn" id="clearBtn" style="display:none;margin-top:8px;background:#f5f5f5;color:#666;border:1px solid #ddd;" onclick="clearImage()">重新选择图片</button>
     </div>
-    <button class="btn btn-primary" id="submitBtn" onclick="upload()">提交上传</button>
+    <button class="btn btn-primary" id="submitBtn" onclick="submitUpload()">提交上传</button>
   </div>
 </div>
 
@@ -113,31 +137,25 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; backg
 let token = '';
 let base64Data = '';
 
-// 尝试从 localStorage 取 token，自动登录
 const saved = localStorage.getItem('toonflow_upload_token');
 if (saved) { token = saved; autoLoad(); }
 
 async function api(path, method, body) {
   const res = await fetch(path, {
     method,
-    headers: {
-      'Content-Type':'application/json',
-      'Authorization': token
-    },
+    headers: { 'Content-Type':'application/json', 'Authorization': token },
     body: body ? JSON.stringify(body) : undefined
   });
   return res.json();
 }
 
 async function login() {
-  const username = document.getElementById('username').value.trim();
-  const password = document.getElementById('password').value.trim();
-  if (!username || !password) return alert('请输入账号和密码');
-
+  const u = document.getElementById('username').value.trim();
+  const p = document.getElementById('password').value.trim();
+  if (!u || !p) return alert('请输入账号和密码');
   const res = await fetch('/api/login/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password })
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: u, password: p })
   });
   const data = await res.json();
   if (data.code === 200 && data.data?.token) {
@@ -145,9 +163,7 @@ async function login() {
     localStorage.setItem('toonflow_upload_token', token);
     await loadProjects();
     document.getElementById('loginCard').style.display = 'none';
-  } else {
-    alert('登录失败: ' + (data.message || ''));
-  }
+  } else { alert('登录失败: ' + (data.message || '')); }
 }
 
 async function autoLoad() {
@@ -158,8 +174,8 @@ async function autoLoad() {
 async function loadProjects() {
   const data = await api('/api/project/getProject', 'POST');
   if (data.code === 200) {
-    const select = document.getElementById('projectId');
-    select.innerHTML = data.data.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+    const sel = document.getElementById('projectId');
+    sel.innerHTML = data.data.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
     document.getElementById('uploadCard').style.display = 'block';
     return true;
   } else {
@@ -197,6 +213,15 @@ function showMsg(text, type) {
   el.textContent = text;
 }
 
+// === 类别切换 ===
+function toggleCategory() {
+  const cat = document.getElementById('category').value;
+  document.getElementById('assetSection').style.display = cat === 'asset' ? 'block' : 'none';
+  document.getElementById('storyboardSection').style.display = cat === 'storyboard' ? 'block' : 'none';
+  if (cat === 'storyboard') onProjectChange();
+}
+
+// === 资产模式 ===
 function toggleMode() {
   const isNew = document.getElementById('mode').value === 'new';
   document.getElementById('newAssetFields').style.display = isNew ? 'block' : 'none';
@@ -211,56 +236,124 @@ async function onTypeChange() {
   const type = document.getElementById('type').value;
   if (!projectId) return;
   const data = await api('/api/assets/getAssetsApi', 'POST', { projectId: Number(projectId), type, page: 1, limit: 200 });
-  const select = document.getElementById('assetId');
+  const sel = document.getElementById('assetId');
   if (data.code === 200 && data.data?.data) {
-    select.innerHTML = data.data.data.map(a => `<option value="${a.id}">${a.name}（${a.describe || '无描述'}）</option>`).join('');
+    sel.innerHTML = data.data.data.map(a => `<option value="${a.id}">${a.name}（${a.describe || '无描述'}）</option>`).join('');
   }
 }
 
-async function upload() {
-  const btn = document.getElementById('submitBtn');
-  const mode = document.getElementById('mode').value;
+// === 分镜模式 ===
+async function onProjectChange() {
+  const cat = document.getElementById('category').value;
+  if (cat !== 'storyboard') return;
+  const sel = document.getElementById('storyboardId');
+  sel.innerHTML = '<option value="">加载中...</option>';
+  const all = await loadAllStoryboards();
+  sel.innerHTML = all.map(sb => `<option value="${sb.id}">#${sb.id} Track:${sb.track || '-'} — ${(sb.videoDesc || sb.prompt || '').slice(0,50)}</option>`).join('');
+  if (!all.length) sel.innerHTML = '<option value="">该项目无分镜数据，请先生成分镜面板</option>';
+}
+
+async function onStoryboardChange() {
+  const id = Number(document.getElementById('storyboardId').value);
+  const previewEl = document.getElementById('sbPreview');
+  const resetBtn = document.getElementById('resetBtn');
+  if (!id) { previewEl.style.display = 'none'; resetBtn.style.display = 'none'; return; }
+  const all = await loadAllStoryboards();
+  const sb = all.find(s => s.id === id);
+  if (sb) {
+    document.getElementById('storyboardInfo').textContent = `状态：${sb.state || '未知'} | Track：${sb.track || '-'} | 描述：${(sb.videoDesc||'').slice(0,60)}`;
+    document.getElementById('storyboardInfo').style.display = 'block';
+    if (sb.src) {
+      previewEl.src = sb.src;
+      previewEl.style.display = 'block';
+      resetBtn.style.display = 'block';
+    } else {
+      previewEl.style.display = 'none';
+      resetBtn.style.display = 'none';
+    }
+  }
+}
+
+async function loadAllStoryboards() {
   const projectId = Number(document.getElementById('projectId').value);
-  const type = document.getElementById('type').value;
+  const scriptRes = await api('/api/script/getScrptApi', 'POST', { projectId });
+  const scripts = scriptRes.data || [];
+  const all = [];
+  for (const s of scripts) {
+    const res = await api('/api/production/storyboard/getStoryboardData', 'POST', { scriptId: s.id, page: 1, limit: 500 });
+    const items = res.data?.data || res.data || [];
+    all.push(...(Array.isArray(items) ? items : []));
+  }
+  return all;
+}
+
+async function resetStoryboard() {
+  const id = Number(document.getElementById('storyboardId').value);
+  if (!id) return;
+  if (!confirm('确定要移除当前图片吗？移除后可重新上传或AI生成。')) return;
+  const res = await api('/api/production/storyboard/resetImage', 'POST', { storyboardId: id });
+  if (res.code === 200) {
+    showMsg('已重置，可重新上传', 'success');
+    document.getElementById('sbPreview').style.display = 'none';
+    document.getElementById('resetBtn').style.display = 'none';
+  } else {
+    showMsg('重置失败: ' + (res.message || ''), 'error');
+  }
+}
+
+// === 统一提交 ===
+async function submitUpload() {
+  const cat = document.getElementById('category').value;
+  const btn = document.getElementById('submitBtn');
 
   if (!base64Data) return showMsg('请选择要上传的图片', 'error');
 
-  let body;
+  if (cat === 'storyboard') {
+    const storyboardId = Number(document.getElementById('storyboardId').value);
+    if (!storyboardId) return showMsg('请选择分镜', 'error');
 
-  if (mode === 'existing') {
-    const assetId = document.getElementById('assetId').value;
-    if (!assetId) return showMsg('请选择已有素材', 'error');
-    body = { projectId, type, assetId: Number(assetId), imageBase64: base64Data.split(',')[1] || base64Data };
+    btn.disabled = true; btn.textContent = '上传中...'; showMsg('', 'error');
+    try {
+      const res = await api('/api/production/storyboard/uploadImage', 'POST', {
+        storyboardId, imageBase64: base64Data.split(',')[1] || base64Data
+      });
+      if (res.code === 200) {
+        showMsg(`上传成功！已更新分镜 #${storyboardId}`, 'success');
+        onStoryboardChange();
+      } else {
+        showMsg('上传失败: ' + (res.message || JSON.stringify(res)), 'error');
+      }
+    } catch(e) { showMsg('网络错误: ' + e.message, 'error'); }
+    finally { btn.disabled = false; btn.textContent = '提交上传'; }
   } else {
-    const name = document.getElementById('name').value;
-    const describe = document.getElementById('describe').value;
-    const prompt = document.getElementById('prompt').value;
-    if (!name || !describe) return showMsg('请填写素材名称和视觉描述', 'error');
-    body = { projectId, type, name, describe, prompt, imageBase64: base64Data.split(',')[1] || base64Data };
-  }
-
-  btn.disabled = true;
-  btn.textContent = '上传中...';
-  showMsg('', 'error');
-
-  try {
-    const res = await api('/api/assets/uploadAssetImage', 'POST', body);
-    if (res.code === 200) {
-      showMsg(`上传成功！素材 ID: ${res.data.assetsId}，图片 ID: ${res.data.imageId}`, 'success');
-      base64Data = '';
-      document.getElementById('preview').style.display = 'none';
-      document.getElementById('fileInput').value = '';
-      document.getElementById('name').value = '';
-      document.getElementById('describe').value = '';
-      document.getElementById('prompt').value = '';
+    // 资产模式
+    const mode = document.getElementById('mode').value;
+    const projectId = Number(document.getElementById('projectId').value);
+    const type = document.getElementById('type').value;
+    let body;
+    if (mode === 'existing') {
+      const assetId = document.getElementById('assetId').value;
+      if (!assetId) return showMsg('请选择已有素材', 'error');
+      body = { projectId, type, assetId: Number(assetId), imageBase64: base64Data.split(',')[1] || base64Data };
     } else {
-      showMsg('上传失败: ' + (res.message || JSON.stringify(res)), 'error');
+      const name = document.getElementById('name').value;
+      const describe = document.getElementById('describe').value;
+      const prompt = document.getElementById('prompt').value;
+      if (!name || !describe) return showMsg('请填写素材名称和视觉描述', 'error');
+      body = { projectId, type, name, describe, prompt, imageBase64: base64Data.split(',')[1] || base64Data };
     }
-  } catch(e) {
-    showMsg('网络错误: ' + e.message, 'error');
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '提交上传';
+    btn.disabled = true; btn.textContent = '上传中...'; showMsg('', 'error');
+    try {
+      const res = await api('/api/assets/uploadAssetImage', 'POST', body);
+      if (res.code === 200) {
+        showMsg(`上传成功！素材 ID: ${res.data.assetsId}`, 'success');
+        clearImage();
+        document.getElementById('name').value = ''; document.getElementById('describe').value = ''; document.getElementById('prompt').value = '';
+      } else {
+        showMsg('上传失败: ' + (res.message || JSON.stringify(res)), 'error');
+      }
+    } catch(e) { showMsg('网络错误: ' + e.message, 'error'); }
+    finally { btn.disabled = false; btn.textContent = '提交上传'; }
   }
 }
 </script>

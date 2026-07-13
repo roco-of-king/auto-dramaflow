@@ -1,0 +1,51 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "改了对比度之后色彩又不对了，是不是调整顺序有问题？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "调色应该先调什么再调什么？正确的顺序是什么？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "用调色台同时操作对比度和色彩，优先级怎么确定？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "为什么专业调色师都强调先定对比度再调色彩？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-not-trigger-01",
+    "type": "should_not_trigger",
+    "prompt": "色彩饱和度怎么调？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-02",
+    "type": "should_not_trigger",
+    "prompt": "画面曝光怎么修正？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-03",
+    "type": "should_not_trigger",
+    "prompt": "视频导出时选择H.264还是ProRes编码格式更合适？",
+    "expected_behavior": "不应激活——这是剪辑/节奏问题，不涉及调色顺序",
+    "expected": "不应激活——用户在讨论视频编码技术，不涉及调色中对比度与色彩的调整顺序"
+  },
+  {
+    "id": "edge-01",
+    "type": "edge_case",
+    "prompt": "风格化调色（如漂白效果）中对比度和色彩的顺序还重要吗？",
+    "expected_behavior": "应部分激活"
+  }
+]

@@ -1,0 +1,1 @@
+Fashion accessories as product photography. Luxury bags/shoes/jewelry with specific lighting setups. Template: "[Item] editorial product shot. [Lighting]. [Camera]. Placed on [surface] with [styling]. Ultra-high detail, visible [material] texture."

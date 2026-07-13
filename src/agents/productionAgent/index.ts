@@ -94,6 +94,24 @@ export async function runDecisionAI(ctx: AgentContext) {
   });
 }
 
+function parseStoryboardItems(text: string): Array<Record<string, string>> {
+  const items: Array<Record<string, string>> = [];
+  const regex = /<storyboardItem\s+([\s\S]*?)(\s*\/?>|\s*><\/storyboardItem>)/gi;
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    const attrs = match[1];
+    const obj: Record<string, string> = {};
+    // 解析 videoDesc='...'  prompt='...'  track='...' 等属性
+    const attrRegex = /(\w+)=("([^"]*)"|'([^']*)')/g;
+    let am;
+    while ((am = attrRegex.exec(attrs)) !== null) {
+      obj[am[1]] = am[3] !== undefined ? am[3] : am[4];
+    }
+    if (Object.keys(obj).length > 0) items.push(obj);
+  }
+  return items;
+}
+
 async function createSubAgent(parentCtx: AgentContext) {
   const { resTool, abortSignal } = parentCtx;
   const memory = new Memory("productionAgent", parentCtx.isolationKey);
@@ -237,6 +255,9 @@ async function createSubAgent(parentCtx: AgentContext) {
     },
   });
 
+  // 获取 production_skills（含原子 skills + 综合文档），供后续子 Agent 使用
+  const productionSkills = await useProductionSkills(projectInfo?.artStyle!, projectInfo?.directorManual!);
+
   //拍摄计划
   const run_sub_agent_director_plan = tool({
     description: "运行执行subAgent来完成导演规划相关任务",
@@ -254,10 +275,13 @@ async function createSubAgent(parentCtx: AgentContext) {
         name: "执行导演",
         memoryKey: "assistant:execution",
         messages: [
-          { role: "assistant", content: artSkills.prompt + `\n${modelInfo}` },
+          { role: "assistant", content: artSkills.prompt + "\n" + productionSkills.prompt + `\n${modelInfo}` },
           { role: "user", content: prompt + addPrompt },
         ],
-        tools: { activate_skill: artSkills.tools.activate_skill },
+        tools: {
+          activate_skill: artSkills.tools.activate_skill,
+          activate_production_skill: productionSkills.tools.activate_skill,
+        },
       });
     },
   });
@@ -294,20 +318,18 @@ async function createSubAgent(parentCtx: AgentContext) {
   //   mainSkills.push({ path: skillPath, ...parsed });
   // }
 
-  const productionSkills = await useProductionSkills(projectInfo?.artStyle!, projectInfo?.directorManual!);
-
   //分镜面板写入
   const run_sub_agent_storyboard_panel = tool({
-    description: "运行执行subAgent来完成分镜面板写入相关任务",
+    description: "运行执行subAgent来完成分镜面板写入相关任务。重要：子Agent输出的<storyboardItem> XML标签必须原样转发给用户，不可省略或替换为摘要。在你的回复中完整包含子Agent输出的所有XML标签。",
     inputSchema: jsonSchema<{ prompt: string }>(promptInput),
     execute: async ({ prompt }) => {
       const skill = path.join(u.getPath("skills"), "production_execution_storyboard_panel.md");
       const systemPrompt = await fs.promises.readFile(skill, "utf-8");
 
       const addPrompt =
-        "\n你必须使用如下XML格式写入工作区：\n```\n<storyboardItem videoDesc='视频描述' prompt=提示词内容 track='分组' shouldGenerateImage='true/false' duration='视频推荐时间' associateAssetsIds='[该分镜所需的资产ID列表]'></storyboardItem>\n```";
+        "\n你必须使用如下XML格式写入工作区（如果决策层指定了「首尾帧模式」，则必须包含 firstFrameState/lastFrameState/firstFramePrompt/lastFramePrompt/inTransitionDesc/outTransitionDesc/modelMode 属性）：\n```\n<storyboardItem videoDesc='视频描述' prompt='提示词内容' track='分组' shouldGenerateImage='true/false' duration='视频推荐时间' associateAssetsIds='[该分镜所需的资产ID列表]' firstFrameState='首帧状态' lastFrameState='尾帧状态' firstFramePrompt='首帧图提示词' lastFramePrompt='尾帧图提示词' inTransitionDesc='入场衔接' outTransitionDesc='出场衔接' modelMode='firstLastFrame'></storyboardItem>\n```";
 
-      return runAgent({
+      const result = await runAgent({
         key: "productionAgent:storyboardPanelAgent",
         prompt,
         system: systemPrompt + addPrompt,
@@ -319,6 +341,66 @@ async function createSubAgent(parentCtx: AgentContext) {
         ],
         tools: { activate_skill: productionSkills.tools.activate_skill },
       });
+      // 解析子Agent输出的 <storyboardItem> XML 并直接写入 o_storyboard + 自动建轨道
+      const storyboardItems = parseStoryboardItems(result);
+      if (storyboardItems.length > 0) {
+        const scriptId = resTool.data.scriptId || (await u.db("o_script").where("projectId", resTool.data.projectId).select("id").first())?.id;
+        // 先清除该 scriptId 下的旧分镜和旧轨道
+        if (scriptId) {
+          await u.db("o_storyboard").where("scriptId", scriptId).delete();
+          // 清除该脚本下所有视频轨道（含手动创建的孤儿轨道）
+          await u.db("o_videoTrack").where("scriptId", scriptId).delete();
+        }
+        // 按 track 分组，为每个 track 创建轨道（trackId 按 track 标签排序后递增）
+        const trackMap = new Map<string, { trackId: number; items: typeof storyboardItems }>();
+        // 收集去重 track 并按数字排序
+        const sortedTracks = [...new Set(storyboardItems.map(i => i.track || "main"))].sort((a, b) => {
+          const na = parseInt(a), nb = parseInt(b);
+          if (!isNaN(na) && !isNaN(nb)) return na - nb;
+          return a.localeCompare(b);
+        });
+        const baseTrackId = Date.now();
+        for (let ti = 0; ti < sortedTracks.length; ti++) {
+          trackMap.set(sortedTracks[ti], { trackId: baseTrackId + ti, items: [] });
+        }
+        for (const item of storyboardItems) {
+          trackMap.get(item.track || "main")!.items.push(item);
+        }
+        for (const [trackName, group] of trackMap) {
+          await u.db("o_videoTrack").insert({
+            id: group.trackId,
+            projectId: resTool.data.projectId,
+            scriptId,
+          });
+          for (let idx = 0; idx < group.items.length; idx++) {
+            const item = group.items[idx];
+            await u.db("o_storyboard").insert({
+              prompt: item.prompt || "",
+              duration: String(item.duration || 4),
+              state: "未生成",
+              scriptId,
+              projectId: resTool.data.projectId,
+              track: trackName,
+              trackId: group.trackId,
+              videoDesc: item.videoDesc || "",
+              shouldGenerateImage: item.shouldGenerateImage === "true" ? 1 : 0,
+              index: idx,
+              createTime: Date.now(),
+              firstFrameState: item.firstFrameState || null,
+              lastFrameState: item.lastFrameState || null,
+              firstFramePrompt: item.firstFramePrompt || null,
+              lastFramePrompt: item.lastFramePrompt || null,
+              inTransitionDesc: item.inTransitionDesc || null,
+              outTransitionDesc: item.outTransitionDesc || null,
+              modelMode: item.modelMode || null,
+            });
+          }
+        }
+      }
+
+      // 追加到决策层消息，供前端渲染
+      parentCtx.msg.text().append("\n\n✅ 已写入 " + storyboardItems.length + " 条分镜到数据库" + (storyboardItems.length > 0 ? "\n" + result : ""));
+      return result;
     },
   });
 
@@ -469,7 +551,9 @@ async function useProductionSkills(artName: string, storyName: string) {
   const skillList = [
     ...(await scanSkills(artWorkerPath + "/*.md")),
     ...(await scanSkills(storyWorkerPath + "/*.md")),
-    ...(await scanSkills(productionPath + "/*.md")),
+    ...(await scanSkills(productionPath + "/*.md")),          // 综合参考文档
+    ...(await scanSkills(productionPath + "/**/SKILL.md")),    // 原子 skills（递归扫描子目录）
+    ...(await scanSkills(productionPath + "/**/INDEX.md")),    // 路由索引
   ];
   const mainSkills: { path: string; name: string; description: string }[] = [];
   for (const skillPath of skillList) {

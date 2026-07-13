@@ -1,0 +1,50 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "一级调色（primary correction）的具体步骤是什么？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "一级校色中lift/gamma/gain怎么配合使用？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "调色的第一步应该是设定黑位和白位还是先校白平衡？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "一级调色和二级调色的分工是什么？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-not-trigger-01",
+    "type": "should_not_trigger",
+    "prompt": "怎么用Power Window给天空单独加蓝色？",
+    "expected_behavior": "不应激活——这是二级调色局部操作，不是一级校色工作流"
+  },
+  {
+    "id": "should-not-trigger-02",
+    "type": "should_not_trigger",
+    "prompt": "特效合成怎么调色？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-03",
+    "type": "should_not_trigger",
+    "prompt": "画面风格化怎么处理？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "edge-01",
+    "type": "edge_case",
+    "prompt": "现场DIT的一级校色和后期调色师的一级校色有什么区别？",
+    "expected_behavior": "应部分激活"
+  }
+]

@@ -1,5 +1,5 @@
 /**
- * Toonflow官方中转平台 供应商适配
+ * Auto-Dramaflow官方中转平台 供应商适配
  * @version 2.0
  */
 
@@ -8,11 +8,17 @@
 // ============================================================
 
 type VideoMode =
+  | "text"                          // 纯文生视频
+  | "firstFrame"                    // 首帧图生视频（1张图）
+  | "firstLastFrame"                // 首尾帧图生视频（2张图）
+  | "multiModal"                    // 多模态参考
+  | "videoExtension"                // 视频延长
+  | "videoEditing"                  // 视频编辑
+  // 旧版兼容
   | "singleImage"
   | "startEndRequired"
   | "endFrameOptional"
   | "startFrameOptional"
-  | "text"
   | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];
 
 interface TextModel {
@@ -158,7 +164,7 @@ const vendor: VendorConfig = {
       name: "Wan2.6 I2V 1080P (支持真人)",
       type: "video",
       modelName: "Wan2.6-I2V-1080P",
-      mode: ["text", "startEndRequired"],
+      mode: ["text", "firstLastFrame"],
       durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["1080p"] }],
       audio: true,
     },
@@ -166,7 +172,7 @@ const vendor: VendorConfig = {
       name: "Wan2.6 I2V 720P (支持真人)",
       type: "video",
       modelName: "Wan2.6-I2V-720P",
-      mode: ["text", "startEndRequired"],
+      mode: ["text", "firstLastFrame"],
       durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["720p"] }],
       audio: true,
     },
@@ -174,7 +180,7 @@ const vendor: VendorConfig = {
       name: "Seedance 1.5 Pro",
       type: "video",
       modelName: "doubao-seedance-1-5-pro-251215",
-      mode: ["text", "endFrameOptional"],
+      mode: ["text", "firstFrame"],
       durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],
       audio: true,
     },
@@ -182,7 +188,7 @@ const vendor: VendorConfig = {
       name: "vidu2 turbo",
       type: "video",
       modelName: "ViduQ2-turbo",
-      mode: ["singleImage", "startEndRequired"],
+      mode: ["firstFrame", "firstLastFrame"],
       durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], resolution: ["540p", "720p", "1080p"] }],
       audio: false,
     },
@@ -190,7 +196,7 @@ const vendor: VendorConfig = {
       name: "ViduQ3 pro",
       type: "video",
       modelName: "ViduQ3-pro",
-      mode: ["singleImage", "startEndRequired"],
+      mode: ["firstFrame", "firstLastFrame"],
       durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], resolution: ["540p", "720p", "1080p"] }],
       audio: false,
     },
@@ -198,7 +204,7 @@ const vendor: VendorConfig = {
       name: "ViduQ2 pro",
       type: "video",
       modelName: "ViduQ2-pro",
-      mode: ["singleImage", "startEndRequired"],
+      mode: ["firstFrame", "firstLastFrame"],
       durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], resolution: ["540p", "720p", "1080p"] }],
       audio: false,
     },
@@ -337,7 +343,7 @@ const videoRequest = async (config: VideoConfig, model: VideoModel): Promise<str
 
   if (lowerName.includes("wan")) {
     // 万象系列
-    if ((activeMode === "startEndRequired" || activeMode === "endFrameOptional" || activeMode === "startFrameOptional") && imageRefs.length >= 2) {
+    if ((activeMode === "firstLastFrame" || activeMode === "startEndRequired" || activeMode === "firstFrame" || activeMode === "endFrameOptional" || activeMode === "startFrameOptional") && imageRefs.length >= 2) {
       if (imageRefs[0]) metadata.first_frame_url = imageRefs[0];
       if (imageRefs[1]) metadata.last_frame_url = imageRefs[1];
     } else if (imageRefs.length) {
@@ -407,15 +413,23 @@ const videoRequest = async (config: VideoConfig, model: VideoModel): Promise<str
       image_roles: [] as string[],
       references: [] as string[],
     };
-    if (Array.isArray(activeMode)) {
+    if (Array.isArray(activeMode) || activeMode === "multiModal") {
       // 多参考模式
       imageRefs.forEach((b) => metadata.references.push(b));
       videoRefs.forEach((b) => metadata.references.push(b));
       audioRefs.forEach((b) => metadata.references.push(b));
-    } else if (activeMode === "startEndRequired" || activeMode === "endFrameOptional" || activeMode === "startFrameOptional") {
+    } else if (activeMode === "firstLastFrame" || activeMode === "startEndRequired") {
+      // 首尾帧模式
       imageRefs.forEach((_, i) => (metadata.image_roles as string[]).push(i === 0 ? "first_frame" : "last_frame"));
-    } else if (activeMode === "singleImage") {
+    } else if (activeMode === "firstFrame" || activeMode === "endFrameOptional" || activeMode === "startFrameOptional" || activeMode === "singleImage") {
+      // 首帧模式
       imageRefs.forEach(() => (metadata.image_roles as string[]).push("reference_image"));
+    } else if (activeMode === "videoExtension" || activeMode === "videoEditing") {
+      // 视频延长/编辑：源视频作为参考
+      videoRefs.forEach((b) => metadata.references.push(b));
+      if (activeMode === "videoEditing") {
+        imageRefs.forEach((b) => metadata.references.push(b));
+      }
     }
   } else if (lowerName.includes("vidu")) {
     // Vidu 系列
@@ -427,16 +441,16 @@ const videoRequest = async (config: VideoConfig, model: VideoModel): Promise<str
   } else if (lowerName.includes("kling")) {
     // 可灵系列
     metadata = { aspect_ratio: config.aspectRatio };
-    if (Array.isArray(activeMode)) {
+    if (Array.isArray(activeMode) || activeMode === "multiModal") {
       metadata.reference = [...imageRefs, ...videoRefs, ...audioRefs];
-    } else if (activeMode === "endFrameOptional" && imageRefs.length) {
+    } else if ((activeMode === "firstFrame" || activeMode === "endFrameOptional") && imageRefs.length) {
       metadata.image_tail = imageRefs[0];
-    } else if (activeMode === "startEndRequired" && imageRefs.length >= 2) {
+    } else if ((activeMode === "firstLastFrame" || activeMode === "startEndRequired") && imageRefs.length >= 2) {
       metadata.image_list = [
         { image_url: imageRefs[0], type: "first_frame" },
         { image_url: imageRefs[1], type: "last_frame" },
       ];
-    } else if (activeMode === "singleImage" && imageRefs.length) {
+    } else if ((activeMode === "firstFrame" || activeMode === "singleImage") && imageRefs.length) {
       metadata.image = imageRefs[0];
     }
   }

@@ -68,6 +68,33 @@ export default async (knex: Knex): Promise<void> => {
   await addColumn("o_assets", "audioBindState", "integer");
   await addColumn("o_modelPrompt", "fileName", "string");
   await addColumn("o_modelPrompt", "path", "string");
+
+  // P1: 分镜面板多模态视频模型适配 — o_storyboard 新增字段
+  await addColumn("o_storyboard", "firstFramePath", "text");
+  await addColumn("o_storyboard", "lastFramePath", "text");
+  await addColumn("o_storyboard", "firstFramePrompt", "text");
+  await addColumn("o_storyboard", "lastFramePrompt", "text");
+  await addColumn("o_storyboard", "firstFrameState", "text");
+  await addColumn("o_storyboard", "lastFrameState", "text");
+  await addColumn("o_storyboard", "extendsFromId", "integer");
+  await addColumn("o_storyboard", "inTransitionDesc", "text");
+  await addColumn("o_storyboard", "outTransitionDesc", "text");
+  await addColumn("o_storyboard", "modelMode", "text");
+
+  // P1: o_videoTrack 新增字段
+  await addColumn("o_videoTrack", "modelMode", "text");
+  await addColumn("o_videoTrack", "sourceVideoId", "integer");
+  await addColumn("o_videoTrack", "extensionDuration", "integer");
+  await addColumn("o_videoTrack", "storyboardId", "integer");
+
+  // P1: o_video 新增字段（含默认值字段）
+  await addColumn("o_video", "mode", "text");
+  await addColumn("o_video", "sourceVideoId", "integer");
+  await addColumn("o_video", "generationRound", "integer");
+  await addColumn("o_video", "userDeleted", "integer");
+  // 为已有视频记录填充默认值
+  await db("o_video").whereNull("generationRound").update({ generationRound: 1 });
+  await db("o_video").whereNull("userDeleted").update({ userDeleted: 0 });
   const vendorDataSelect = await u.db("o_vendorConfig").whereIn("id", ["deepseek", "atlascloud"]).select("*");
   if (!vendorDataSelect.find((i) => i.id == "deepseek")) {
     await u.db("o_vendorConfig").insert({

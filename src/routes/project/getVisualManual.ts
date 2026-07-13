@@ -61,9 +61,15 @@ export default router.post("/", async (req, res) => {
       styleDirs.map(async (styleName) => {
         const styleDir = path.join(artPromptsDir, styleName);
         const images = await readAllImages(styleName);
-        const readmePath = path.join(styleDir, "README.md");
-        const readmeContent = fs.readFileSync(readmePath, "utf-8");
-        const firstLine = readmeContent.split("\n")[0].replace(/--/g, "");
+        // 容错读取 README.md
+        let firstLine = styleName;
+        try {
+          const readmePath = path.join(styleDir, "README.md");
+          const readmeContent = fs.readFileSync(readmePath, "utf-8");
+          firstLine = readmeContent.split("\n")[0].replace(/--/g, "") || styleName;
+        } catch {
+          // README.md 不存在时使用目录名
+        }
         const data = DATA_MAP.map(({ label, value, subDir }) => {
           let mdPath: string;
           if (subDir) {
@@ -80,7 +86,7 @@ export default router.post("/", async (req, res) => {
 
         return {
           name: firstLine,
-          image: images,
+          image: images.length ? images : ["[Image #1]"],
           stylePath: styleName,
           data,
         };

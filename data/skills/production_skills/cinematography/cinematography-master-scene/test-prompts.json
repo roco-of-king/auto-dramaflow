@@ -1,0 +1,38 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "主场景法是什么？先拍全景还是先拍特写？",
+    "expected_behavior": "激活，解释主场景拍摄法的流程"
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "对话场景怎么拍才能在剪辑时有足够素材",
+    "expected_behavior": "激活，解释主场景法+预备选镜头"
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "多机位拍摄和主场景法有什么区别",
+    "expected_behavior": "激活，比较两种方法"
+  },
+  {
+    "id": "should-not-trigger-01",
+    "type": "should_not_trigger",
+    "prompt": "怎么用灯光拍对话",
+    "expected_behavior": "不激活，这是灯光问题"
+  },
+  {
+    "id": "should-not-trigger-02",
+    "type": "should_not_trigger",
+    "prompt": "过肩镜头怎么构图",
+    "expected_behavior": "不激活，这是构图问题"
+  },
+  {
+    "id": "should-not-trigger-03",
+    "type": "should_not_trigger",
+    "prompt": "180度规则是什么",
+    "expected_behavior": "不激活，这是轴线问题"
+  }
+]

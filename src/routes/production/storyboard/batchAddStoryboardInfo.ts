@@ -17,6 +17,15 @@ export default router.post(
         videoDesc: z.string(),
         shouldGenerateImage: z.number(),
         associateAssetsIds: z.array(z.number()),
+        // 首尾帧扩展字段（可选）
+        firstFrameState: z.string().optional(),
+        lastFrameState: z.string().optional(),
+        firstFramePrompt: z.string().optional(),
+        lastFramePrompt: z.string().optional(),
+        inTransitionDesc: z.string().optional(),
+        outTransitionDesc: z.string().optional(),
+        modelMode: z.string().optional(),
+        extendsFromId: z.number().optional(),
       }),
     ),
     scriptId: z.number(),
@@ -36,6 +45,14 @@ export default router.post(
         videoDesc: item.videoDesc,
         shouldGenerateImage: item.shouldGenerateImage,
         createTime: Date.now(),
+        firstFrameState: item.firstFrameState ?? null,
+        lastFrameState: item.lastFrameState ?? null,
+        firstFramePrompt: item.firstFramePrompt ?? null,
+        lastFramePrompt: item.lastFramePrompt ?? null,
+        inTransitionDesc: item.inTransitionDesc ?? null,
+        outTransitionDesc: item.outTransitionDesc ?? null,
+        modelMode: item.modelMode ?? null,
+        extendsFromId: item.extendsFromId ?? null,
       });
       if (item.associateAssetsIds?.length) {
         await u.db("o_assets2Storyboard").insert(
@@ -102,7 +119,15 @@ export default router.post(
           state: i.state,
           scriptId: i.scriptId,
           reason: i.reason,
-          videoDesc: i.videoDesc
+          videoDesc: i.videoDesc,
+          firstFrameState: i.firstFrameState ?? undefined,
+          lastFrameState: i.lastFrameState ?? undefined,
+          firstFramePrompt: i.firstFramePrompt ?? undefined,
+          lastFramePrompt: i.lastFramePrompt ?? undefined,
+          inTransitionDesc: i.inTransitionDesc ?? undefined,
+          outTransitionDesc: i.outTransitionDesc ?? undefined,
+          modelMode: i.modelMode ?? undefined,
+          extendsFromId: i.extendsFromId ?? undefined,
         };
       }),
     );

@@ -1,0 +1,1 @@
+Fashion film prompt. Style: "Luxury fashion editorial video, cinematic camera movement, precise fabric detail, editorial color grading." Time-coded shots with model movement, fabric flow, lighting transitions.

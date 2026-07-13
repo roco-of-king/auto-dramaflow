@@ -1,4 +1,28 @@
 
+======================================================================
+注意 / Notice
+======================================================================
+本文件包含两部分 / This file contains two parts:
+
+  Part A (第3-203行 / lines 3-203): 标准 Apache License 2.0
+  Part B (第206行起 / from line 206): 原作者 HBAI-Ltd 的补充商业协议
+      / Supplementary Commercial Agreement by HBAI-Ltd
+
+补充协议要点 / Key points of the supplementary agreement:
+  - 向 2 个以上独立第三方分发此软件或其衍生版本，需取得 HBAI-Ltd 书面商业授权
+  - Distributing this software or derivatives to 2+ independent third
+    parties requires written commercial authorization from HBAI-Ltd
+  - 5 个以内法人主体联合内部运营，无需商业授权
+  - ≤5 legal entities jointly operating internally is always free
+  - 不得删除或修改控制台/应用程序中的版权标识和商标
+  - Do not remove trademarks, logos, or copyright notices in the
+    console or application
+
+本项目 Auto-Dramaflow 基于 Toonflow 二次开发，遵守原项目完整许可条款。
+Auto-Dramaflow is based on Toonflow and complies with all original terms.
+
+======================================================================
+
                                  Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/

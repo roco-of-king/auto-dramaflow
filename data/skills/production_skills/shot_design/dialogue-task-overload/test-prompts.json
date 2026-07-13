@@ -1,0 +1,32 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "我的演员在对话场景中表演很僵硬，像在背台词。她一直说'我觉得我应该看对方'，但我觉得不看更好。怎么办？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "演员抱怨走位太复杂，说'这个走位不对，不符合角色性格'。我该怎么回应？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "剧本里两个人在厨房边做饭边谈重要的事。怎样设计任务组合让表演更自然？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "两个刚认识的演员要拍一场亲密对话，他们之间还没有化学反应。怎么快速建立？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-05",
+    "type": "should_trigger",
+    "prompt": "任务过载会不会让演员连台词都忘了？有没有上限？",
+    "expected_behavior": ""
+  }
+]

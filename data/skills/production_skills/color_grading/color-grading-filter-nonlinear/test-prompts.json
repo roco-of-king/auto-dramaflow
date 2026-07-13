@@ -1,0 +1,51 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "怎么在数字调色中模拟Pro-Mist柔光滤镜的效果？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "光学滤镜的非线性特征和数字处理有什么区别？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "模拟电影胶片的halation（光晕）效果怎么做？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "数字滤镜能做到和实体光学滤镜一样的效果吗？局限在哪？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-not-trigger-01",
+    "type": "should_not_trigger",
+    "prompt": "美图秀秀的磨皮效果和抖音的美颜有什么技术区别？",
+    "expected_behavior": "不应激活——这是手机应用滤镜，不是电影级光学/数字滤镜",
+    "expected": "不应激活——用户在问手机美颜App的区别，不是电影级光学/数字滤镜模拟"
+  },
+  {
+    "id": "should-not-trigger-02",
+    "type": "should_not_trigger",
+    "prompt": "Lightroom里怎么给RAW照片添加颗粒质感？",
+    "expected_behavior": "不应激活——这是照片后期处理，不是电影调色中的滤镜模拟"
+  },
+  {
+    "id": "should-not-trigger-03",
+    "type": "should_not_trigger",
+    "prompt": "视频转场特效怎么做？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "edge-01",
+    "type": "edge_case",
+    "prompt": "虚拟制作（LED Volume）中还需要光学滤镜吗？",
+    "expected_behavior": "应部分激活"
+  }
+]

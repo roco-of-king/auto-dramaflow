@@ -32,7 +32,7 @@ export default router.post(
           const storyboard = await u
             .db("o_storyboard")
             .where("o_storyboard.id", item.id)
-            .select("videoDesc", "prompt", "track", "duration", "shouldGenerateImage")
+            .select("videoDesc", "prompt", "track", "duration", "shouldGenerateImage", "firstFrameState", "lastFrameState", "firstFramePrompt", "lastFramePrompt", "inTransitionDesc", "outTransitionDesc", "modelMode")
             .first();
           // 查询分镜关联的资产ID
           const assetRows = await u.db("o_assets2Storyboard").where("storyboardId", item.id).orderBy("rowid").select("assetId");
@@ -79,6 +79,13 @@ export default router.post(
           duration: item.duration,
           associateAssetsIds: item.associateAssetsIds,
           shouldGenerateImage: item.shouldGenerateImage,
+          firstFrameState: item.firstFrameState,
+          lastFrameState: item.lastFrameState,
+          firstFramePrompt: item.firstFramePrompt,
+          lastFramePrompt: item.lastFramePrompt,
+          inTransitionDesc: item.inTransitionDesc,
+          outTransitionDesc: item.outTransitionDesc,
+          modelMode: item.modelMode,
         });
     }
     const assetsNotAudioIds = assets.filter((i) => i.type == "audio").map((i) => i.id);
@@ -119,16 +126,30 @@ export default router.post(
       let fileName: string | null = null;
 
       if (modelLower.includes("wan") && modelLower.includes("2.6")) {
-        // wan2.6 系列 => 单图首尾帧模式
+        // wan2.6 系列 => 单图首帧模式
         fileName = "wan2.6Single-imageFirstFrameMode.md";
       } else if (/seedance.*2[.\-]0/i.test(modelData)) {
-        // seedance 2.0 / 2-0 系列
-        fileName = "seedance2Multi-parameterMode.md";
-      } else if (mode === "startEndRequired" || mode === "endFrameOptional" || mode === "startFrameOptional") {
-        // body.mode 为首尾帧相关 => 通用首尾帧模式
+        // seedance 2.0 系列 — 根据 mode 选择模板
+        if (mode === "firstLastFrame" || mode === "startEndRequired") {
+          fileName = "universalFirstAndLastFrameMode.md";
+        } else if (mode === "videoExtension") {
+          fileName = "seedance2VideoExtension.md";
+        } else if (mode === "videoEditing") {
+          fileName = "seedance2VideoEditing.md";
+        } else {
+          fileName = "seedance2Multi-parameterMode.md";
+        }
+      } else if (mode === "firstLastFrame" || mode === "startEndRequired" || mode === "endFrameOptional" || mode === "startFrameOptional" || mode === "firstFrame") {
+        // 首尾帧相关模式 => 通用首尾帧模式
         fileName = "universalFirstAndLastFrameMode.md";
+      } else if (mode === "videoExtension") {
+        fileName = "seedance2VideoExtension.md";
+      } else if (mode === "videoEditing") {
+        fileName = "seedance2VideoEditing.md";
       } else if (typeof mode === "string" && mode.startsWith('["') && mode.endsWith('"]')) {
-        // 其他 => 通用多参模式
+        // 数组模式 => 通用多参模式
+        fileName = "universalMulti-parameterMode.md";
+      } else if (mode === "multiModal") {
         fileName = "universalMulti-parameterMode.md";
       }
       if (fileName) {
@@ -138,6 +159,42 @@ export default router.post(
         } catch {
           // 文件不存在则忽略，继续用备选
         }
+      }
+    }
+
+    // 尝试加载类型专属模板（如短剧情感/史诗电影/动画动作等），作为基础模板的补充
+    let genreTemplate = "";
+    if (videoPromptGeneration && /seedance/i.test(modelData)) {
+      const projectType = (projectData?.type ?? "").trim();
+      const genreMap: Record<string, string> = {
+        "爱情": "seedance2ShortDramaEmotional.md",
+        "言情": "seedance2ShortDramaEmotional.md",
+        "霸总": "seedance2ShortDramaCEO.md",
+        "逆袭": "seedance2ShortDramaCEO.md",
+        "爽剧": "seedance2ShortDramaCEO.md",
+        "喜剧": "seedance2SketchComedy.md",
+        "搞笑": "seedance2SketchComedy.md",
+        "科幻": "seedance2CinematicEpic.md",
+        "史诗": "seedance2CinematicEpic.md",
+        "动作": "seedance2CinematicEpic.md",
+        "战争": "seedance2CinematicEpic.md",
+        "悬疑": "seedance2CinematicNoir.md",
+        "惊悚": "seedance2CinematicNoir.md",
+        "文艺": "seedance2CinematicNoir.md",
+        "动画": "seedance2AnimeAction.md",
+        "动漫": "seedance2AnimeAction.md",
+        "UGC": "seedance2UGCVlog.md",
+        "Vlog": "seedance2UGCVlog.md",
+      };
+      let genreFile: string | null = null;
+      for (const [keyword, file] of Object.entries(genreMap)) {
+        if (projectType.includes(keyword)) { genreFile = file; break; }
+      }
+      if (genreFile) {
+        try {
+          const modelPromptRoot = u.getPath(["modelPrompt"]);
+          genreTemplate = await fs.readFile(path.join(modelPromptRoot, "video", genreFile), "utf-8");
+        } catch { /* 文件不存在则忽略 */ }
       }
     }
 
@@ -154,6 +211,12 @@ export default router.post(
           console.log("%c Line:158 🍢", "background:#ffdd4d",assets);
 
     const visualManual = u.getArtPrompt(artStyle, "art_skills", "art_storyboard_video");
+
+    // 将类型专属模板追加到 system prompt（如果已加载）
+    if (genreTemplate) {
+      videoPromptGeneration = `${videoPromptGeneration}\n\n---\n\n## 附加：当前项目类型专属的提示词生成风格参考\n\n${genreTemplate}`;
+    }
+
     const content = `
           **模型名称**：${modelData},
 
@@ -162,10 +225,22 @@ export default router.post(
             .map((i) => `[${i.id},${i.type},${i.name} ${assetsAudioRecord[i.id] ? `audio:${assetsAudioRecord[i.id]}` : ""} ] `)
             .join("，")},
           **分镜信息**：${storyboard.map(
-            (i) => `<storyboardItem
-  videoDesc='${i.videoDesc}'
-  duration='${i.duration}'
-></storyboardItem>`,
+            (i) => {
+              const esc = (s: string) => s.replace(/'/g, "\\'").replace(/\n/g, "\\n");
+              const extraAttrs = [
+                i.firstFrameState ? `firstFrameState='${esc(i.firstFrameState)}'` : "",
+                i.lastFrameState ? `lastFrameState='${esc(i.lastFrameState)}'` : "",
+                i.firstFramePrompt ? `firstFramePrompt='${esc(i.firstFramePrompt)}'` : "",
+                i.lastFramePrompt ? `lastFramePrompt='${esc(i.lastFramePrompt)}'` : "",
+                i.inTransitionDesc ? `inTransitionDesc='${esc(i.inTransitionDesc)}'` : "",
+                i.outTransitionDesc ? `outTransitionDesc='${esc(i.outTransitionDesc)}'` : "",
+                i.modelMode ? `modelMode='${i.modelMode}'` : "",
+              ].filter(Boolean).join("\n  ");
+              return `<storyboardItem
+  videoDesc='${esc(i.videoDesc)}'
+  ${extraAttrs ? extraAttrs + "\n  " : ""}duration='${i.duration}'
+></storyboardItem>`;
+            },
           )},
           `;
     console.log("%c Line:156 🍬 content", "background:#4fff4B", content);

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "我的电影开场是主角被叫到校长办公室，怎样让主角的第一次出场更有冲击力？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "剧本里一个角色收到了噩耗，我想让观众感受到他听到消息时的震惊。怎样用延迟揭示来放大这个瞬间？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "群戏中一个角色一直沉默，最后才揭示他的身份。怎么用延迟揭示让他开口的瞬间更有冲击力？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "恐怖片中，受害者发现房间里还有另一个人。怎样用延迟揭示制造恐惧？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-05",
+    "type": "should_trigger",
+    "prompt": "我想拍一个面试场景，面试官已经坐好了，应聘者推门进来。怎样让应聘者的出场更有戏剧性？",
+    "expected_behavior": ""
+  }
+]

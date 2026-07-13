@@ -1,0 +1,1 @@
+Game cinematic trailer prompt. Style: "AAA game cinematic trailer, in-engine footage quality, dynamic camera movement, real-time rendering aesthetic." Time-coded shots: establishing flyover → character close-up → action sequence → title card. Must include believable game HUD elements.

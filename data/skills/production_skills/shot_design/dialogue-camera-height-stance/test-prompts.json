@@ -1,0 +1,26 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "审讯室场景，警察坐着审问站着的嫌疑人。我想让观众站在警察这边。摄影机高度怎么安排？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "两个角色在酒吧对话，一个坐在吧凳上，另一个站着。我想让观众感受到坐着的角色的不安全感。",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "一个孩子和一个成年人对话，我想让观众站在孩子的角度感受成年人的巨大。",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "对话场景摄影机放在什么高度？仰拍和俯拍怎么选？",
+    "expected_behavior": ""
+  }
+]

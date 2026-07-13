@@ -1,5 +1,5 @@
 /**
- * Toonflow AI供应商模板
+ * Auto-Dramaflow AI供应商模板
  * @version 2.0
  */
 

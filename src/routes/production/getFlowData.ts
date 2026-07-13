@@ -98,6 +98,21 @@ export default router.post(
             } else {
               i.filePath = "";
             }
+            // 首尾帧图片路径也转为 OSS URL
+            if (i.firstFramePath) {
+              try {
+                i.firstFramePath = await u.oss.getSmallImageUrl(i.firstFramePath);
+              } catch {
+                i.firstFramePath = null;
+              }
+            }
+            if (i.lastFramePath) {
+              try {
+                i.lastFramePath = await u.oss.getSmallImageUrl(i.lastFramePath);
+              } catch {
+                i.lastFramePath = null;
+              }
+            }
           }),
         );
         const storyboardIds = storyboardData.map((i) => i.id);
@@ -151,6 +166,17 @@ export default router.post(
             shouldGenerateImage: i.shouldGenerateImage,
             reason: i?.reason ?? "",
             flowId: i.flowId,
+            trackId: i.trackId,
+            // 首尾帧扩展字段
+            firstFramePath: i.firstFramePath || undefined,
+            lastFramePath: i.lastFramePath || undefined,
+            firstFrameState: i.firstFrameState ?? undefined,
+            lastFrameState: i.lastFrameState ?? undefined,
+            firstFramePrompt: i.firstFramePrompt ?? undefined,
+            lastFramePrompt: i.lastFramePrompt ?? undefined,
+            inTransitionDesc: i.inTransitionDesc ?? undefined,
+            outTransitionDesc: i.outTransitionDesc ?? undefined,
+            modelMode: i.modelMode ?? undefined,
           }))
           .sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
         res.status(200).send(success(flowData));

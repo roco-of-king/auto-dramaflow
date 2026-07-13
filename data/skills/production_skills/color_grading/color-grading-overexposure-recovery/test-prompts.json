@@ -1,0 +1,50 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "高光区域过曝太严重了，传统调色拉不回来，还有什么办法？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "红色通道被完全裁切了，能不能从绿色通道借数据恢复？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "天空过曝成纯白了，怎么用其他通道的信息来恢复？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "过曝的肤色怎么修复？单色过曝和全通道过曝处理方式一样吗？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-not-trigger-01",
+    "type": "should_not_trigger",
+    "prompt": "暗部噪点怎么在降噪软件里处理？",
+    "expected_behavior": "不应激活——这是降噪处理，不是过曝通道恢复"
+  },
+  {
+    "id": "should-not-trigger-02",
+    "type": "should_not_trigger",
+    "prompt": "画面噪点怎么去除？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-03",
+    "type": "should_not_trigger",
+    "prompt": "曝光怎么在前期控制？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "edge-01",
+    "type": "edge_case",
+    "prompt": "RAW素材和ProRes素材的过曝恢复能力差多少？",
+    "expected_behavior": "应部分激活"
+  }
+]

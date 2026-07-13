@@ -26,9 +26,9 @@
     <img src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Electron/electron2.svg" alt="Electron" />
   </p>
 
-  > 🚀 **一站式短剧工程**：从文本到角色，从分镜到视频，0门槛全流程AI化，创作效率提升10倍+！
+  > 🚀 **Auto-Dramaflow** — 基于 AI 的短剧/漫剧一站式生产平台。支持小说智能改编、AI 剧本生成、角色/场景/道具素材管理、分镜图生成、视频合成、TTS 配音等完整创作链路。
   >
-  > 本项目基于 [Toonflow](https://github.com/HBAI-Ltd/Toonflow-app) 进行二次开发，新增了**阿里云百炼(DashScope)通义千问模型**支持及**独立素材上传页面**等功能。
+  > 本项目基于 [Toonflow](https://github.com/HBAI-Ltd/Toonflow-app) v1.1.7 二次开发，在上游能力基础上新增：**首尾帧双卡片模式**、**卡片级联视频工作台**、**多模态参考上传**、**视频编辑/延长**、**阿里云百炼 DashScope 全系接入**、**37 位导演技能库 + 审阅子 Agent**、**14 套画风技能**、**100+ 项生产技能专精（摄影/灯光/调色/导演/转场/镜头设计/声音设计/故事设计）**、**7 套 Seedance 2.0 场景提示词模板**、**独立素材上传门户**、**分镜图管理接口**、**跳过更新检查**及 **Agent 模型动态切换**等功能。
 </div>
 
 ---
@@ -52,10 +52,46 @@ Auto-Dramaflow 是面向短剧生产的 AI 工作台，围绕"策划 → 编剧 
 
 ### 🆕 本仓库新增功能
 
+- ✅ **首尾帧双卡片模式**  
+  分镜表支持首帧/尾帧双卡片展示，前端双卡片预览 + 后端 `firstFramePath`/`lastFramePath` 字段全链路贯通，支持 URL↔路径自动转换及 OSS 签名 URL 输出。
+- ✅ **卡片级联视频工作台**  
+  分镜卡片与视频轨道按 track 分组级联排列，支持多模态视频模型（文生/图生/首尾帧/多参考）混排生产，一键批量生成全轨道视频。
 - ✅ **阿里云百炼(DashScope)通义千问模型支持**  
   新增 DashScope 供应商，完整支持 Qwen3/Qwen2.5 系列文本模型、Wan2.6 图片生成、Wan2.7 及 HappyHorse 视频生成。
 - ✅ **独立素材上传页面 (upload.html)**  
   提供独立的 Web 素材上传界面，支持新建素材/关联已有素材两种模式，方便快速批量导入角色、场景、道具图片。
+- ✅ **导演技能库 (director_skills)**  
+  37 位知名导演风格配置（克里斯托弗·诺兰、王家卫、张艺谋、宫崎骏、新海诚、丹尼斯·维伦纽瓦等），导演 Agent 可参考对应风格进行分镜规划和影片节奏控制。
+- ✅ **导演审阅子 Agent**  
+  ScriptAgent 新增导演审阅子 Agent，可基于导演风格对剧本和分镜进行风格化审阅与调整建议。
+- ✅ **画风技能扩展 (14 套)**  
+  新增 7 套画风：中国水墨、赛博朋克黑色电影、游戏电影级、油画厚涂、时尚编辑、漫画动态分镜、水彩诗意，覆盖 2D/3D/写实等多维度风格。
+- ✅ **生产技能专精库 (13 项)**  
+  新增视听语言规范、合规过滤、材质增强（毛绒/平面/金属）、天气控制、好莱坞调色、中国电影 LUT、摄影级角色/场景提示词、生理细节标准、Seedance 提示词模式库、镜头构图等生产级技能。
+- ✅ **Seedance 2.0 场景提示词模板 (7 套)**  
+  覆盖动漫动作、电影史诗、黑色电影、短剧总裁、短剧情感、素描喜剧、UGC Vlog 七大场景，开箱即用。
+- ✅ **分镜图管理接口**  
+  新增分镜图上传 (`storyboard/uploadImage`)、重置 (`storyboard/resetImage`) 及视频提示词检查 (`workbench/checkVideoPrompt`) 接口，完善分镜工作流。
+- ✅ **Agent 模型配置动态更新**  
+  新增 `setting/agentDeploy/updateAgentModel` 接口，支持在线动态切换各 Agent 子模块所使用的 AI 模型，无需重启服务。
+- ✅ **多模态视频模型数据库适配**  
+  三张核心表新增 18 个字段，支持多模态视频模型（首尾帧、多参考图、音频可选）的模式记录与状态追踪。
+- ✅ **视频编辑/延长模式**  
+  支持 `videoExtension`（视频延长）和 `videoEditing`（视频编辑）两种新工作模式，自动加载源视频 ID (`sourceVideoId`) 作为入参，前端多模态参考面板集成扩展/延长时长配置。
+- ✅ **跳过更新检查开关**  
+  新增 `dev/getSkipUpdateCheck` 和 `dev/updateSkipUpdateCheck` 接口，支持开发者环境跳过版本更新检查，避免开发过程中频繁提示更新。
+- ✅ **多模态参考素材上传**  
+  视频生成支持多模态参考素材（图片/视频/音频）本地上传，资产选择按类型自动过滤，批量生成前校验源视频就绪状态。
+- ✅ **生产技能专精库 (8 大类 100+ 项)**  
+  新增系统化电影制作技能库，按领域分为：
+  - **摄影参考** — 镜头锚定、摄像机技术、镜头角度与上下文
+  - **灯光与氛围** — 三点布光、硬光/柔光、背光、光向情绪、区域曝光系统、180度法则
+  - **调色工作流** — 色温调整、先对比后色彩、饱和度对比、Log 工作流、Look 开发、记忆色、肤色矢量示波器、镜头匹配
+  - **导演技法** — 活动 vs 行动、张力公式、戏剧反讽、看不见的见证人、巧合的麻烦、结尾先于开端
+  - **场景转场** — 无缝暂停、同步节点、忠诚转移、二元对立、音乐象限、天气对比
+  - **镜头设计** — 对话台本、视线映射、深景调度、视角光谱、视线剪辑、镜头编排、长焦压缩、双机张力
+  - **声音设计** — 听觉层次、声学一致性、对比戏剧、声音能量模型、频率影响、同步错觉、奏鸣曲戏剧结构
+  - **故事设计** — Save the Cat 节拍表、五步终章、玻璃碎片理论、中点设计、B 故事主题映射
 
 ---
 
@@ -157,6 +193,83 @@ POST /api/assets/uploadAssetImage
 
 ---
 
+## 导演技能库 (director_skills)
+
+为导演 Agent 提供了 31 位知名导演的风格参考文件，位于 `data/skills/director_skills/` 目录。每位导演的风格文件涵盖其标志性的镜头语言、叙事节奏、色调偏好、场景构图等视觉美学特征。
+
+| 类别 | 导演 |
+| :--- | :--- |
+| 🎬 好莱坞 | 克里斯托弗·诺兰、史蒂文·斯皮尔伯格、昆汀·塔伦蒂诺、詹姆斯·卡梅隆、大卫·芬奇、弗朗西斯·福特·科波拉 |
+| 🎬 欧洲 | 英格玛·伯格曼、米开朗基罗·安东尼奥尼、费德里科·费里尼、路易斯·布努埃尔 |
+| 🎬 亚洲 | 黑泽明、宫崎骏、小津安二郎、奉俊昊、朴赞郁、是枝裕和 |
+| 🎬 华语 | 周星驰、王家卫、张艺谋、陈凯歌、姜文、侯孝贤、杨德昌、徐克、吴宇森、贾樟柯、李安、杜琪峰、陈可辛、路阳 |
+
+### 使用方式
+
+1. 在项目设置中选择目标导演风格
+2. 导演规划 Agent 会自动加载对应导演的 Markdown 风格文件作为参考
+3. 生成的分镜 prompt 和视频 prompt 会融入该导演的视觉美学特征
+
+### 文件结构
+
+```
+data/skills/director_skills/
+├── 克里斯托弗·诺兰.md
+├── 周星驰.md
+├── 宫崎骏.md
+└── ...
+```
+
+---
+
+## 导演审阅子 Agent
+
+在 ScriptAgent 三层架构（决策层 → 执行层 → 监督层）中新增导演审阅子 Agent，位于监督层。
+
+- **功能**：基于选定的导演风格，对剧本和分镜进行风格化审阅
+- **输出**：针对分镜节奏、镜头语言、画面构图、色调氛围等维度提供调整建议
+- **配置**：通过 `updateAgentModel` 接口可动态切换审阅 Agent 使用的 AI 模型
+
+---
+
+## 分镜图管理接口
+
+新增三个 API 接口，完善分镜工作流：
+
+### 分镜图上传
+
+```
+POST /api/production/storyboard/uploadImage
+```
+
+支持将本地生成的图片直接上传并关联到指定分镜，跳过 AI 生成环节。
+
+### 分镜图重置
+
+```
+POST /api/production/storyboard/resetImage
+```
+
+重置某个分镜的图片状态，支持重新生成或重新上传。
+
+### 视频提示词检查
+
+```
+POST /api/production/workbench/checkVideoPrompt
+```
+
+在提交视频生成任务前，对分镜的提示词进行格式校验和内容检查，减少无效调用。
+
+### Agent 模型动态更新
+
+```
+POST /api/setting/agentDeploy/updateAgentModel
+```
+
+支持在线动态切换各 Agent 子模块（决策层/执行层/监督层/导演审阅等）所使用的 AI 模型，无需修改配置文件和重启服务。
+
+---
+
 # 🚀 安装
 
 ## 前置条件
@@ -198,7 +311,7 @@ POST /api/assets/uploadAssetImage
 
 ```shell
 # 克隆项目
-git clone https://github.com/top0-github/auto-dramaflow.git
+git clone https://github.com/roco-of-king/auto-dramaflow.git
 cd auto-dramaflow
 
 # 使用 docker-compose 本地构建并启动
@@ -233,7 +346,7 @@ docker run -d -p <本地端口>:10588 -v <本地数据路径>:/app/data auto-dra
 ### 一、服务器环境要求
 
 - **系统**：Ubuntu 20.04+ / CentOS 7+
-- **Node.js**：23.x（推荐）
+- **Node.js**：23.x（推荐，最低 23.11.1+）
 - **内存**：2GB+
 
 ### 二、服务器部署
@@ -253,7 +366,7 @@ npm install -g yarn pm2
 
 ```bash
 cd /opt
-git clone https://github.com/top0-github/auto-dramaflow.git
+git clone https://github.com/roco-of-king/auto-dramaflow.git
 cd auto-dramaflow
 yarn install
 yarn build
@@ -327,7 +440,7 @@ pm2 monit                # 监控面板
 1. **克隆项目**
 
    ```bash
-   git clone https://github.com/top0-github/auto-dramaflow.git
+   git clone https://github.com/roco-of-king/auto-dramaflow.git
    cd auto-dramaflow
    ```
 
@@ -387,6 +500,8 @@ pm2 monit                # 监控面板
 │  ├─ 📂 oss/               # 对象存储（素材/角色/场景）
 │  ├─ 📂 serve/             # 生产环境入口
 │  ├─ 📂 skills/            # Agent 技能提示词
+│  │   ├─ director_skills/  # 🆕 导演技能库（31位导演风格）
+│  │   └─ ...
 │  ├─ 📂 vendor/            # AI 供应商脚本
 │  │   ├─ dashscope.ts      # 🆕 阿里云百炼(DashScope)供应商
 │  │   ├─ openai.ts         # OpenAI 供应商
@@ -411,10 +526,17 @@ pm2 monit                # 监控面板
 │  ├─ 📂 cornerScape/       # 分镜管理
 │  ├─ 📂 novel/             # 小说管理
 │  ├─ 📂 production/        # 制作管理
+│  │   ├─ storyboard/
+│  │   │   ├─ uploadImage.ts  # 🆕 分镜图上传
+│  │   │   └─ resetImage.ts   # 🆕 分镜图重置
+│  │   └─ workbench/
+│  │       └─ checkVideoPrompt.ts  # 🆕 视频提示词检查
 │  ├─ 📂 project/           # 项目管理
 │  ├─ 📂 script/            # 剧本生成
 │  ├─ 📂 scriptAgent/       # 剧本 Agent 接口
 │  ├─ 📂 setting/           # 系统设置
+│  │   └─ agentDeploy/
+│  │       └─ updateAgentModel.ts  # 🆕 Agent模型动态更新
 │  └─ 📂 task/              # 任务管理
 ├─ 📂 socket/               # WebSocket 实时通信
 ├─ 📂 types/                # TypeScript 类型声明
@@ -468,6 +590,6 @@ pm2 monit                # 监控面板
 
 > ⚠️ 上游 Toonflow 项目有其独立的商业授权补充协议，如涉及商业分发请参考[上游仓库](https://github.com/HBAI-Ltd/Toonflow-app)的完整许可条款。
 
-##### copyright © 基于 Toonflow 二次开发
+© 2025 HBAI-Ltd (original Toonflow) | © 2026 roco-of-king (Auto-Dramaflow modifications) | Licensed under Apache 2.0 with supplementary terms — see [LICENSE](./LICENSE)
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=100&section=footer" width="100%"/>

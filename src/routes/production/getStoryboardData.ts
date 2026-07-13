@@ -71,6 +71,17 @@ export default router.post(
           prompt: item.prompt ?? undefined,
           scriptId: item.scriptId ?? undefined,
           characters: charactersWithUrl,
+          // 首尾帧扩展字段
+          firstFrameState: item.firstFrameState ?? undefined,
+          lastFrameState: item.lastFrameState ?? undefined,
+          firstFramePrompt: item.firstFramePrompt ?? undefined,
+          lastFramePrompt: item.lastFramePrompt ?? undefined,
+          firstFramePath: item.firstFramePath ? await u.oss.getSmallImageUrl(item.firstFramePath) : undefined,
+          lastFramePath: item.lastFramePath ? await u.oss.getSmallImageUrl(item.lastFramePath) : undefined,
+          inTransitionDesc: item.inTransitionDesc ?? undefined,
+          outTransitionDesc: item.outTransitionDesc ?? undefined,
+          modelMode: item.modelMode ?? undefined,
+          extendsFromId: item.extendsFromId ?? undefined,
         };
       }),
     );

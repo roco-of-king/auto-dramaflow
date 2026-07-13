@@ -35,10 +35,11 @@ export default router.post(
     resolution: z.string(),
     duration: z.number(),
     audio: z.boolean().optional(),
+    sourceVideoId: z.number().optional(),
     trackId: z.number(),
   }),
   async (req, res) => {
-    const { scriptId, projectId, prompt, uploadData, model, duration, resolution, audio, mode, trackId } = req.body;
+    const { scriptId, projectId, prompt, uploadData, model, duration, resolution, audio, mode, sourceVideoId, trackId } = req.body;
     let modeData = [];
     if (Array.isArray(mode)) {
     } else if (typeof mode === "string" && mode.startsWith('["') && mode.endsWith('"]')) {
@@ -49,10 +50,22 @@ export default router.post(
     //获取生成视频比例
     const ratio = await u.db("o_project").select("videoRatio").where("id", projectId).first();
     const videoPath = `/${projectId}/video/${uuidv4()}.mp4`; //视频保存路径
-    //查询出图片数据
+    //查询出图片数据（根据 mode 选择不同的查询路径）
+    const isDualFrame = (modeData.length > 0 ? modeData[0] : mode) === "firstLastFrame" || mode === "firstLastFrame";
     const images = await Promise.all(
       uploadData.map(async (item: UploadItem) => {
         if (item.sources === "storyboard") {
+          if (isDualFrame) {
+            // 首尾帧模式：分别取 firstFramePath 和 lastFramePath
+            const frameData = await u.db("o_storyboard")
+              .where("id", item.id)
+              .select("firstFramePath", "lastFramePath")
+              .first();
+            return [
+              { path: frameData?.firstFramePath, sources: "firstFrame" },
+              { path: frameData?.lastFramePath, sources: "lastFrame" },
+            ];
+          }
           const filePath = await u.db("o_storyboard").where("id", item.id).select("filePath").first();
           return { path: filePath?.filePath, sources: "storyBoard" };
         }
@@ -67,14 +80,30 @@ export default router.post(
         }
       }),
     );
-    //把images里面的图片转成base64格式
+    // 展平首尾帧模式下的嵌套数组
+    const flatImages = images.flat();
+    //把flatImages里面的图片转成base64格式
     const base64 = await Promise.all(
-      images.map(async (item) => {
-        if (!item) return null;
-        return { base64: await u.oss.getImageBase64(item.path), type: item.sources == "audio" ? "audio" : "image" };
+      flatImages.map(async (item) => {
+        if (!item || !item.path) return null;
+        const type = item.sources === "firstFrame" || item.sources === "lastFrame" ? "image" :
+          item.sources === "audio" ? "audio" : "image";
+        return { base64: await u.oss.getImageBase64(item.path), type };
       }),
     );
-    //新增
+    // 视频延长/编辑模式：加载源视频
+    const activeMode = modeData.length > 0 ? modeData[0] : mode;
+    const isExtOrEdit = activeMode === "videoExtension" || activeMode === "videoEditing";
+    if (isExtOrEdit && sourceVideoId) {
+      const srcVideo = await u.db("o_video").where("id", sourceVideoId).select("filePath").first();
+      if (srcVideo?.filePath) {
+        try {
+          const videoUrl = await u.oss.getFileUrl(srcVideo.filePath);
+          base64.push({ base64: videoUrl, type: "video" });
+        } catch { /* 源视频加载失败，跳过 */ }
+      }
+    }
+    //新增视频记录
     const [videoId] = await u.db("o_video").insert({
       filePath: videoPath,
       time: Date.now(),
@@ -82,6 +111,9 @@ export default router.post(
       scriptId,
       projectId,
       videoTrackId: trackId,
+      mode: typeof activeMode === "string" ? activeMode : "multiModal",
+      generationRound: 1,
+      userDeleted: 0,
     });
     res.status(200).send(success(videoId));
     const relatedObjects = {

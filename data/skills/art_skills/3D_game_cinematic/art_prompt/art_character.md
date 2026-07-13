@@ -1,0 +1,1 @@
+Game character design as in-engine screenshots. Templates: (1) Monster hunter in layered leather armor, sword drawn, over-the-shoulder framing. (2) Cyberpunk protagonist with glowing implants, third-person action pose. (3) Pixel-art samurai practicing sword moves in village square. (4) Anime-style archer drawing bow in lush forest. All must include appropriate game HUD elements.
