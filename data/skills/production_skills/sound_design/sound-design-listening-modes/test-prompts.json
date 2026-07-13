@@ -1,0 +1,50 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "观众听到这个声音会以为是什么发出的？怎么利用这种认知偏差？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "外语角色说话时观众听不懂语言但需要感受到情绪，怎么设计？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "评估一段声音设计是否有效，观众会以什么方式听？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "恐怖场景中怎么利用'因果倾听'让观众自己脑补恐怖源？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-not-trigger-01",
+    "type": "should_not_trigger",
+    "prompt": "对白翻译怎么做？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-02",
+    "type": "should_not_trigger",
+    "prompt": "字幕怎么排版？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-03",
+    "type": "should_not_trigger",
+    "prompt": "观众的心理预期怎么通过剧情节奏控制？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "edge-01",
+    "type": "edge_case",
+    "prompt": "ASMR内容中观众的倾听模式和电影中有什么本质区别？",
+    "expected_behavior": "应部分激活"
+  }
+]

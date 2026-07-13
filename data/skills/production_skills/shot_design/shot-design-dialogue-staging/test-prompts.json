@@ -1,0 +1,38 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "两个人对话怎么安排站位？",
+    "expected_behavior": "应激活，介绍I形态10位置"
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "多人对话场景怎么调度？",
+    "expected_behavior": "应激活，介绍L/A形态扩展"
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "对话场景看起来很单调怎么办？",
+    "expected_behavior": "应激活，引导使用不同调度形态"
+  },
+  {
+    "id": "should-not-trigger-01",
+    "type": "should_not_trigger",
+    "prompt": "对白内容怎么写？",
+    "expected_behavior": "不应激活"
+  },
+  {
+    "id": "should-not-trigger-02",
+    "type": "should_not_trigger",
+    "prompt": "故事结构怎么设计？",
+    "expected_behavior": "不应激活"
+  },
+  {
+    "id": "edge-01",
+    "type": "edge_case",
+    "prompt": "五个人在餐桌旁对话，怎么调度？",
+    "expected_behavior": "应激活——多人对话是A形态的扩展应用"
+  }
+]

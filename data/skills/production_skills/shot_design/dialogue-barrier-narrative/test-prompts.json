@@ -1,0 +1,26 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "我需要拍一个场景：两个曾经的好友闹翻了，现在隔着咖啡馆的玻璃窗对视。怎样用障碍物表现他们从隔绝到可能和解的过程？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "剧本里有一场戏，母亲和女儿冷战三天没说话，今天终于在厨房隔着餐桌坐下来吃饭。预算很低，只能用家里现成的东西。怎么设计这个障碍物？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "两个角色隔墙对话，我想用障碍物的材质表现他们关系的变化。障碍物怎么选？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "隔栏杆对话的场景，怎么用物理隔离制造戏剧张力？",
+    "expected_behavior": ""
+  }
+]

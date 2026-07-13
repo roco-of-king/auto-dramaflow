@@ -1,0 +1,38 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "硬光和软光有什么区别？什么时候用哪个？",
+    "expected_behavior": "激活，解释硬光/软光的原理和选择"
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "柔光布离灯多远效果最好",
+    "expected_behavior": "激活，解释柔光的实现方法"
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "想要拍出硬朗的光影效果，用什么灯",
+    "expected_behavior": "激活，解释硬光的特点和实现"
+  },
+  {
+    "id": "should-not-trigger-01",
+    "type": "should_not_trigger",
+    "prompt": "三点照明怎么布置",
+    "expected_behavior": "不激活，这是三点照明问题"
+  },
+  {
+    "id": "should-not-trigger-02",
+    "type": "should_not_trigger",
+    "prompt": "演员脸上阴影太重怎么处理",
+    "expected_behavior": "可能激活但主要涉及补光比例"
+  },
+  {
+    "id": "should-not-trigger-03",
+    "type": "should_not_trigger",
+    "prompt": "怎么用灯光营造神秘感",
+    "expected_behavior": "不激活，这是灯光方向/情绪问题"
+  }
+]

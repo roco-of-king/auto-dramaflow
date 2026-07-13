@@ -1,0 +1,50 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "画面整体偏蓝偏冷，怎么用色温调整让它变暖？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "混合光源场景（日光+钨丝灯）怎么处理色温不一致？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "日落效果怎么通过色温调出来但不过度？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "色温和白平衡的关系是什么？校色时先调哪个？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-not-trigger-01",
+    "type": "should_not_trigger",
+    "prompt": "饱和度太高怎么降？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-02",
+    "type": "should_not_trigger",
+    "prompt": "画面的对比度怎么调？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-03",
+    "type": "should_not_trigger",
+    "prompt": "镜头滤镜怎么选？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "edge-01",
+    "type": "edge_case",
+    "prompt": "夜戏中混合了月光（蓝）和路灯（橙），色温怎么平衡才自然？",
+    "expected_behavior": "应部分激活"
+  }
+]

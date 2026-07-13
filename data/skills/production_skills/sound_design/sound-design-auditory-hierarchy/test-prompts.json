@@ -1,0 +1,50 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "混录的时候对白被音效盖住了，观众听不清台词，怎么处理层次？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "我在做一个战场场景，枪声、喊叫声、音乐同时响，怎么让观众知道该注意哪个？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "环境声太突出抢了对白的注意力，怎么降低但又不能完全去掉？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "声音设计中如何建立清晰的听觉层次，让观众的注意力跟着叙事走？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-not-trigger-01",
+    "type": "should_not_trigger",
+    "prompt": "这个镜头的构图怎么安排？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-02",
+    "type": "should_not_trigger",
+    "prompt": "配乐用什么风格比较合适？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-03",
+    "type": "should_not_trigger",
+    "prompt": "剪辑节奏怎么把控？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "edge-01",
+    "type": "edge_case",
+    "prompt": "纪录片中旁白和同期声冲突，优先级怎么判断？",
+    "expected_behavior": "应部分激活"
+  }
+]

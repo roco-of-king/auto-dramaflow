@@ -255,6 +255,9 @@ async function createSubAgent(parentCtx: AgentContext) {
     },
   });
 
+  // 获取 production_skills（含原子 skills + 综合文档），供后续子 Agent 使用
+  const productionSkills = await useProductionSkills(projectInfo?.artStyle!, projectInfo?.directorManual!);
+
   //拍摄计划
   const run_sub_agent_director_plan = tool({
     description: "运行执行subAgent来完成导演规划相关任务",
@@ -272,10 +275,13 @@ async function createSubAgent(parentCtx: AgentContext) {
         name: "执行导演",
         memoryKey: "assistant:execution",
         messages: [
-          { role: "assistant", content: artSkills.prompt + `\n${modelInfo}` },
+          { role: "assistant", content: artSkills.prompt + "\n" + productionSkills.prompt + `\n${modelInfo}` },
           { role: "user", content: prompt + addPrompt },
         ],
-        tools: { activate_skill: artSkills.tools.activate_skill },
+        tools: {
+          activate_skill: artSkills.tools.activate_skill,
+          activate_production_skill: productionSkills.tools.activate_skill,
+        },
       });
     },
   });
@@ -311,8 +317,6 @@ async function createSubAgent(parentCtx: AgentContext) {
   //   const parsed = parseFrontmatter(content);
   //   mainSkills.push({ path: skillPath, ...parsed });
   // }
-
-  const productionSkills = await useProductionSkills(projectInfo?.artStyle!, projectInfo?.directorManual!);
 
   //分镜面板写入
   const run_sub_agent_storyboard_panel = tool({
@@ -547,7 +551,9 @@ async function useProductionSkills(artName: string, storyName: string) {
   const skillList = [
     ...(await scanSkills(artWorkerPath + "/*.md")),
     ...(await scanSkills(storyWorkerPath + "/*.md")),
-    ...(await scanSkills(productionPath + "/*.md")),
+    ...(await scanSkills(productionPath + "/*.md")),          // 综合参考文档
+    ...(await scanSkills(productionPath + "/**/SKILL.md")),    // 原子 skills（递归扫描子目录）
+    ...(await scanSkills(productionPath + "/**/INDEX.md")),    // 路由索引
   ];
   const mainSkills: { path: string; name: string; description: string }[] = [];
   for (const skillPath of skillList) {

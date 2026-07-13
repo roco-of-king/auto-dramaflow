@@ -1,0 +1,74 @@
+---
+name: color-grading-log-workflow
+description: |
+  当用户处理Log编码素材（RED/ARRI/Sony RAW等）时调用。核心流程：先在Log状态下用Offset做整体调整，再用Shadow/Midtone/Highlight做影调分区，套用LUT正常化后做精细调整。Log状态适合大刀阔斧，正常化后适合精雕细琢。
+source_book: 《调色师手册》第2版 Alexis Van Hurkman
+source_chapter: 第3章
+tags: [Log编码, LUT, 正常化, 动态范围, RAW素材, 高宽容度]
+related_skills:
+  - composes-with: color-grading-primary-workflow (f01) — 正常化后的一级校色
+---
+
+# Log编码素材调色流程
+
+## R — 原文 (Reading)
+> 对已经正常化的素材使用Shadow、Midtone、Highlight工具，你会发现，每个影调之间的重叠比较轻微，不是很实用。这就是在套用LUT之前，调整这些控件的原因。
+> — Van Hurkman, 第3章, p.g_0025
+
+## I — 方法论骨架 (Interpretation)
+Log编码素材保留了摄影机传感器的高动态范围（13-14档），但画面看起来低对比度、低饱和度。其调色需要特殊的两阶段工作流：
+
+**阶段一：Log状态下**
+- 使用Offset/Exposure做整体信号定位
+- 使用Shadow/Midtone/Highlight做影调分区——在Log状态下这些控件的影响范围更宽、过渡更平滑，因为影调区之间有广泛重叠
+- Pivot/Range控件可自定义影调区边界
+
+**阶段二：正常化后**
+- 套用LUT或手动正常化到BT.709
+- 使用Lift/Gamma/Gain做精细对比度调整
+- 使用色彩平衡控件做精细色彩校正
+
+核心逻辑：Log状态下控件的行为类似于胶片配光，适合大范围调整；正常化后控件的行为更像传统视频调色，适合精细操作。
+
+## A1 — 书中的应用 (Past Application)
+### 案例：ARRI Alexa Log-C素材调色 (第3章)
+- **问题**: RAW/Log素材看起来灰蒙蒙，动态范围远超BT.709显示能力
+- **方法论的使用**: 先在Log状态用Offset整体定位，再用Shadow/Midtone/Highlight做初步影调，最后套LUT正常化后用Lift/Gamma/Gain精调
+- **结论**: Log状态下的Shadow控件向中间调区域延伸更多，提供更平滑的过渡
+
+### 案例 2: RED Monstro 8K VV素材调色
+- **问题**: RED RAW素材在Log3G10编码下动态范围极高，直接套LUT后高光裁切严重，天空细节完全丢失
+- **方法论的使用**: 先在Log状态用Offset整体降低信号2档保护高光，再用Shadow/Midtone/Highlight做宽范围影调，最后套LUT正常化后用Lift/Gamma/Gain精调天空区域的高光恢复
+- **结论**: Log状态下先做信号定位是防止正常化后细节丢失的关键步骤
+- **结果**: 成功保留了14档动态范围内的高光和暗部细节
+
+## A2 — 触发场景 (Future Trigger) ★
+1. 拿到Log编码素材（RED Log3G10/ARRI Log-C/Sony S-Log3）需要调色
+2. 客户提供LUT需要在调色流程中集成
+3. RAW素材反拜耳后看起来严重过曝但需要找回高光细节
+
+### 语言信号
+- "这是Log素材/RAW素材"、"需要套LUT"
+- "画面看起来灰灰的/低对比度"
+- "摄影机动态范围很大"
+
+## E — 可执行步骤 (Execution)
+1. **在Log状态做整体调整**——用Offset/Exposure定位信号范围
+2. **用Shadow/Midtone/Highlight做影调分区**——利用Log状态下的宽重叠做平滑过渡
+3. **套用LUT或正常化**——转换到目标显示标准
+4. **用Lift/Gamma/Gain做精细调整**——此时控件影响更精确
+5. **做色彩平衡和饱和度微调**
+
+
+   - 🔴 判停条件: 若正常化后发现高光或暗部细节丢失，说明Log状态下未做充分的信号定位，回到步骤1在Log状态下重新调整Offset
+
+## B — 边界 (Boundary) ★
+- **不要在正常化后再用Shadow/Midtone/Highlight**——过渡会变得尖锐不自然
+- **不要在Log状态下做精细色彩校正**——控件影响范围太宽，精度不够
+- **失败模式**: 忘记在套LUT前做初步调整，导致正常化后丢失高光/暗部细节
+
+### 作者的盲点 / 时代局限
+
+Alexis Van Hurkman 的调色方法论基于专业 DaVinci Resolve 工作流，对轻量级工具（如 Premiere Lumetri、手机调色 App）的适配讨论不足。他假设调色师有参考级监视器和校色环境，独立创作者在消费级显示器上的调色策略覆盖较少。书中色彩科学理论偏重 REC.709，对 HDR/WCG 工作流的实操指导相对薄弱。
+
+此外，LOG 工作流的讨论偏重技术层面，对创意层面的影响（如 LOG 素材的'平面'感如何影响导演和客户的现场判断）涉及较少。此外，他假设调色师有完整的后期流程支持，对独立创作者从 LOG 到交付的全链路实操指导不足。

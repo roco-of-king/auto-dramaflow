@@ -1,0 +1,26 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "剧本里一个员工在对话中逐渐占据了上风，最终反过来教训了老板。怎样用视觉语言表现这种权力逆转？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "两个谈判者在会议室里对话，一开始甲方强势，后来乙方逆转了局势。怎样让观众感受到这种变化？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "我能用跳切来表现位置交换吗？直接切到交换后的画面不行吗？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "在一个三角关系场景中，A和B争夺C的注意力。怎样用位置变化表现谁最终赢得了C？",
+    "expected_behavior": ""
+  }
+]

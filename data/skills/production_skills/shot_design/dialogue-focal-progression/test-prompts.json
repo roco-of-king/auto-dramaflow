@@ -1,0 +1,26 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "剧本里两个恋人多年后重逢，从街的两端走向对方。怎样让这个接近的过程比实际更有仪式感？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "我要拍一个场景：老板从办公桌后面走出来靠近下属施压。怎样用焦距变化增强压迫感？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "一段关系从亲密走向破裂的场景，两个人在同一个房间里渐渐远离。怎样用镜头表达这种疏远？",
+    "expected_behavior": ""
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "用单机位能实现焦距递进效果吗？我只有一台摄影机。",
+    "expected_behavior": ""
+  }
+]

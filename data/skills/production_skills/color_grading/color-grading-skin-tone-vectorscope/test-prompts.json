@@ -1,0 +1,51 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "怎么用矢量示波器判断肤色是否偏色？I-bar是什么？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "多人镜头中不同肤色怎么平衡到同一个参考线上？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "画面偏色但肉眼看不出来，怎么用肤色作为快速参考判断？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "矢量示波器上肤色应该落在什么位置？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-not-trigger-01",
+    "type": "should_not_trigger",
+    "prompt": "Premiere Pro里的Lumetri Scopes面板怎么设置显示范围？",
+    "expected_behavior": "不应激活——与其他skill相关",
+    "expected": "不应激活——用户在问软件界面设置，不涉及用肤色矢量示波器做色彩平衡"
+  },
+  {
+    "id": "should-not-trigger-02",
+    "type": "should_not_trigger",
+    "prompt": "直方图怎么看？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-03",
+    "type": "should_not_trigger",
+    "prompt": "肤色在PS中怎么修？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "edge-01",
+    "type": "edge_case",
+    "prompt": "非人类角色（如外星人、动画角色）的肤色还需要参考I-bar吗？",
+    "expected_behavior": "应部分激活"
+  }
+]

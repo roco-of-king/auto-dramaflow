@@ -1,0 +1,38 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "三点照明怎么布置？主光补光背光放哪里",
+    "expected_behavior": "激活，解释三点照明的布置方法"
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "主光和补光的光比多少合适",
+    "expected_behavior": "激活，解释光比控制"
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "背光太强导致头发边缘过曝怎么调",
+    "expected_behavior": "激活，解释背光的调整"
+  },
+  {
+    "id": "should-not-trigger-01",
+    "type": "should_not_trigger",
+    "prompt": "硬光好还是软光好",
+    "expected_behavior": "不激活，这是光质问题"
+  },
+  {
+    "id": "should-not-trigger-02",
+    "type": "should_not_trigger",
+    "prompt": "灯光方向怎么影响情绪",
+    "expected_behavior": "不激活，这是灯光方向/情绪问题"
+  },
+  {
+    "id": "should-not-trigger-03",
+    "type": "should_not_trigger",
+    "prompt": "色温怎么匹配",
+    "expected_behavior": "不激活，这是色温问题"
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "id": "should-trigger-01",
+    "type": "should_trigger",
+    "prompt": "恐怖场景的惊吓点怎么用声音铺垫预期再打破？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-02",
+    "type": "should_trigger",
+    "prompt": "喜剧场景中怎么用声音打破严肃预期来制造笑点？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-03",
+    "type": "should_trigger",
+    "prompt": "场景太可预测了，怎么用声音制造意外？",
+    "expected_behavior": "应激活此skill"
+  },
+  {
+    "id": "should-trigger-04",
+    "type": "should_trigger",
+    "prompt": "反转揭示的瞬间，声音设计怎么通过先建立观众的听觉期待再打破它来配合叙事转折？",
+    "expected_behavior": "应激活此skill",
+    "expected": "应激活——用户需要通过声音期待的建立与违反来配合叙事转折"
+  },
+  {
+    "id": "should-not-trigger-01",
+    "type": "should_not_trigger",
+    "prompt": "剧情节奏怎么制造悬念？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "should-not-trigger-02",
+    "type": "should_not_trigger",
+    "prompt": "摄影机运动中怎么制造意外感？比如推镜头突然停住或改变方向？",
+    "expected_behavior": "不应激活——与其他skill相关",
+    "expected": "不应激活——用户在问镜头运动技法，不涉及声音期待与违反的设计"
+  },
+  {
+    "id": "should-not-trigger-03",
+    "type": "should_not_trigger",
+    "prompt": "剪辑中怎么制造意外感？",
+    "expected_behavior": "不应激活——与其他skill相关"
+  },
+  {
+    "id": "edge-01",
+    "type": "edge_case",
+    "prompt": "观众已经习惯了jump scare套路，还有没有新的声音惊吓手法？",
+    "expected_behavior": "应部分激活"
+  }
+]

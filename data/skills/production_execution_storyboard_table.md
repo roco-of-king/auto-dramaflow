@@ -26,6 +26,17 @@ description: >-
 
 ### 风格技法参考
 
+本系统集成了 **98 个原子化制作技法 skills**，通过 `activate_skill` 工具按需加载。在构建分镜表时，**遇到以下场景必须激活对应 skill 获取精确指导**：
+
+| 分镜决策 | 应激活的 skill |
+|----------|---------------|
+| 该用什么景别？（远/全/中/近/特） | 加载 `production_skills/INDEX.md` → `shot_design/INDEX.md` |
+| 运镜怎么选？（推/拉/摇/移/跟/升/降） | 同上 |
+| 对话场景机位怎么放？ | `shot-design-dialogue-staging` |
+| 场间转场用什么方式？ | `scene_transitions/INDEX.md` |
+| 镜头连续性检查（朝向/轴线） | `shot-design-axis-of-action` |
+| 情绪对应的运镜组合 | `shot_design/INDEX.md` → 情绪→技法速查 |
+| AI 视频 prompt 需要摄影机锚点 | `camera_reference/INDEX.md` |
 
 
 ### 执行流程
