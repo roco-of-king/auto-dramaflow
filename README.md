@@ -130,7 +130,7 @@ Auto-Dramaflow 是面向短剧生产的 AI 工作台，围绕"策划 → 编剧 
 ### 配置方式
 
 1. 前往 [阿里云百炼控制台](https://bailian.console.aliyun.com/) 获取 API Key
-2. 在 Toonflow 设置中心 → 模型供应商 → 添加供应商 → 选择"阿里云百炼(DashScope)"
+2. 在设置中心 → 模型供应商 → 添加供应商 → 选择"阿里云百炼(DashScope)"
 3. 填入 API Key 和请求地址（默认 `https://dashscope.aliyuncs.com/api/v1`）
 4. 保存后即可在剧本生成、图片生成、视频生成中选择通义千问系列模型
 
